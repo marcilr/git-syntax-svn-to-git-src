@@ -1,0 +1,11 @@
+#!/bin/bash
+# svn-to-git
+# Created Wed Jan 27 15:55:10 AKST 2016
+# Copyright (C) 2016 by Raymond E. Marcil <marcilr@gmail.com>
+#
+# Convert subversion repository to git
+#
+# Usage:
+#   svn-to-git <subversion repo to convert>
+#
+
