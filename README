@@ -13,3 +13,6 @@ svn-to-git-users
   The marcilr, and root users have users.txt entries cleaned up.
   Other users will have to have name and email updated in users.txt
 
+test
+  Test driver for svn-to-git
+
