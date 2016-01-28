@@ -9,7 +9,7 @@
 # =====================================
 # Configuration
 # =====================================
-REPO=svn+ssh://home/data/svnroot/software/daemons/daemons
+REPO=svn+ssh://home/data/svnroot/software/daemons/ntp/ntp
 
 # =====================================
 # Binaries
