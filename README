@@ -5,6 +5,9 @@ Copyright (C) 2016 by Raymond E. Marcil <marcilr@gmail.com>
 
 Filelist
 ========
+process.txt
+  Subversion to git conversion process
+
 svn-to-git
   Convert subversion repository to git
 
