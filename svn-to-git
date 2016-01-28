@@ -126,4 +126,4 @@ function process-cli-args(){
 # Check argument count
 ARGCOUNT=$#
 
-echo "ARGCOUNT: $#"
+debug "main: ARGCOUNT=$#"
