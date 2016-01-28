@@ -77,7 +77,7 @@ function message {
 # Display usage and exit.
 #
 function usage(){
-  message "Usage: ${0}"
+  message "Usage: ${0} <authors> <subversion repo>"
   message "   -d | --debug   Enable debugging."
   message "   -h | --help    Create non-hierarchical repository."
 }
@@ -127,3 +127,7 @@ function process-cli-args(){
 ARGCOUNT=$#
 
 debug "main: ARGCOUNT=$#"
+
+if [ ${ARGCOUNT} != 2 ]; then
+  usage
+fi
