@@ -4,10 +4,12 @@
 # Copyright (C) 2016 by Raymond E. Marcil <marcilr@gmail.com>
 #
 # Script to extract users from subversion repository to users.txt file.
+# Run this inside an subversion checkout.
 #
-# The marcilr, and root users have users.txt entries cleaned up.
+# The marcilr, and root users have entries in users.txt cleaned up
+# automatically.
 #
-# Other users will have to have name and email updated in users.txt
+# Other auhtors will have to have name and email updated manually.
 #
 #
 # Links
