@@ -12,6 +12,14 @@
 # ==============================================
 # Configuration
 # ==============================================
+
+#
+# Enable/disable debugging.
+#
+DEBUG=true
+
+
+# Subversion users
 USERS=users.txt
 
 
