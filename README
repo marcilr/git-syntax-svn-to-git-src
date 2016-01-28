@@ -5,6 +5,9 @@ Copyright (C) 2016 by Raymond E. Marcil <marcilr@gmail.com>
 
 Filelist
 ========
+svn-to-git
+  Convert subversion repository to git
+
 svn-to-git-users
   Script to extract users from subversion repository to users.txt file.
   The marcilr, and root users have users.txt entries cleaned up.
