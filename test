@@ -9,9 +9,10 @@
 # =====================================
 # Configuration
 # =====================================
-
+REPO=svn+ssh://home/data/svnroot/software/daemons/daemons
 
 # =====================================
-# BInaries
+# Binaries
 # =====================================
+SUBVERSION=/usr/bin/svn
 SVNTOGIT=./svn-to-git
