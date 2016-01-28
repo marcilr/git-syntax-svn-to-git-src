@@ -26,3 +26,61 @@ SORT=/usr/bin/sort
 SVN=/usr/bin/svn
 UNIQ=/usr/bin/uniq
 
+
+# ==============================================
+# Functions
+# ==============================================
+
+#
+# debug()
+# Output debugging text.
+# INPUT: $1 - Text to output if DEBUG="
+#
+function debug {
+
+  if [ ${DEBUG} = "true" ]; then
+    echo "debug() ${1}"
+  fi
+
+}
+
+
+#
+# message()
+# Display specified message passed as argument.
+#
+# INPUT
+# =====
+# Message to display as argument.
+#
+# RESULTS
+# =======
+# Displays argument to stdio.
+#
+function message {
+
+  echo ${1}
+
+}
+
+
+#
+# usage()
+# Display usage and exit.
+#
+function usage(){
+  message "Usage: ${0}"
+  message "   -d | --debug   Enable debugging."
+  message "   -h | --help    Create non-hierarchical repository."
+}
+
+
+
+# ==============================================
+# Main
+# ==============================================
+
+# Check argument count
+ARGCOUNT=$#
+
+echo "ARGCOUNT: $#"
