@@ -74,6 +74,41 @@ function usage(){
   message "   -h | --help    Create non-hierarchical repository."
 }
 
+#
+# process-cli-args()
+#
+# Links
+# =====
+# How to process command-line args in bash scripts
+# http://debaan.blogspot.com/2007/06/how-to-process-command-line-args-in.html
+#
+function process-cli-args(){
+
+  debug "process-cli-args(): START"
+
+  # Display number of command line arguments
+  debug "process-cli-args(): number args=${#commandline_args[@]}"
+
+  # Loop over command line arguments (in correct order).
+  for arg in "${commandline_args[@]}"; do
+    case ${arg} in
+      "-d" | "--debug")
+        DEBUG=true
+        debug "DEBUG=true"
+        ;;
+      "-h" | "--help")
+        usage
+        exit 0
+        ;;
+      *)
+        ;;
+    esac
+  done
+
+  debug "process-cli-args(): END"
+
+}
+
 
 
 # ==============================================
