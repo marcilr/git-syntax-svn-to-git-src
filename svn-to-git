@@ -9,3 +9,20 @@
 #   svn-to-git <subversion repo to convert>
 #
 
+# ==============================================
+# Configuration
+# ==============================================
+USERS=users.txt
+
+
+# ==============================================
+# Binaries
+# ==============================================
+AWK=/usr/bin/awk
+GREP=/bin/grep
+PERL=/usr/bin/perl
+SED=/bin/sed
+SORT=/usr/bin/sort
+SVN=/usr/bin/svn
+UNIQ=/usr/bin/uniq
+
