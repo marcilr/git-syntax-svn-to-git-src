@@ -1,0 +1,13 @@
+process.txt
+Created Thu Jan 28 14:47:21 AKST 2016
+Copyright (C) 2016 by Raymond E. Marcil <marcilr@gmail.com>
+
+
+Subversion to git conversion process
+
+
+1. Checkout subversion repo:
+$ svn co svn+ssh://home/data/svnroot/software/daemons/ntp/ntp ntp-ORIG
+
+NOTE: Using "ORIG" extension to alleviate git "ntp" repo name conflict.
+
