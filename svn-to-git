@@ -20,7 +20,7 @@ DEBUG=true
 
 
 # Subversion users
-USERS=users.txt
+AUTHORS=users.txt
 
 
 # ==============================================
