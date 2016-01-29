@@ -3,13 +3,13 @@
 # Created Wed Jan 27 15:23:43 AKST 2016
 # Copyright (C) 2016 by Raymond E. Marcil <marcilr@gmail.com>
 #
-# Script to extract users from subversion repository to users.txt file.
+# Script to extract authors from subversion repository and output to console.
 # Run this inside an subversion checkout.
 #
 # The marcilr, and root users have entries in users.txt cleaned up
 # automatically.
 #
-# Other auhtors will have to have name and email updated manually.
+# Other authors will have to have name and email updated manually.
 #
 #
 # Links
@@ -69,10 +69,29 @@ rm -f ${OUTFILE}
 #
 AUTHORS=$(${SVN} log -q | ${GREP} -e '^r' | ${AWK} 'BEGIN { FS = "|" } ; { print $2 }' | ${SORT} | ${UNIQ})
 for AUTHOR in ${AUTHORS}; do
-  echo "${AUTHOR} = NAME <USER@DOMAIN>" >> ${OUTFILE}
+
+  #  echo "${AUTHOR} = NAME <USER@DOMAIN>" >> ${OUTFILE}
+
+  #
+  # Clean up known authors (marcilr and root)
+  #
+  case "${AUTHOR}" in
+    marcilr)
+      echo "marcilr = Raymond Marcil <marcilr@gmail.com>"
+      ;;
+    root)
+      echo "root = root <root@localhost>"
+      ;;
+    *)
+      echo "${AUTHOR} = NAME <USER@DOMAIN>"
+      ;;
+  esac
+
 done
 
-
+#
 # Clean up known users in users.txt file
-${SED} -i 's/marcilr = NAME <USER@DOMAIN>/marcilr = Raymond Marcil <marcilr@gmail.com>/g' ${OUTFILE}
-${SED} -i 's/root = NAME <USER@DOMAIN>/root = root <root@localhost>/g' ${OUTFILE}
+# NOTE: Deprecated now doing info for loop above with case statement.
+#
+#${SED} -i 's/marcilr = NAME <USER@DOMAIN>/marcilr = Raymond Marcil <marcilr@gmail.com>/g' ${OUTFILE}
+#${SED} -i 's/root = NAME <USER@DOMAIN>/root = root <root@localhost>/g' ${OUTFILE}
