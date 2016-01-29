@@ -11,3 +11,26 @@ $ svn co svn+ssh://home/data/svnroot/software/daemons/ntp/ntp ntp-ORIG
 
 NOTE: Using "ORIG" extension to alleviate git "ntp" repo name conflict.
 
+2. Get authors for "ntp" repo in users.txt file:
+$ cd ntp-ORIG
+$ ../svn-to-git-user
+$ mv users.txt ..
+$ cd ..
+$ cat users.txt 
+marcilr = Raymond Marcil <marcilr@gmail.com>
+$
+
+Looks good.
+
+3. In present working directory use "git svn clone" to convert "ntp" repo:
+$ git svn clone svn+ssh://home/data/svnroot/software/daemons/ntp/ntp \
+--authors-file=./users.txt --no-metadata ntp
+Initialized empty Git repository in \
+/home/marcilr/git/syntax/svn-to-git/src/ntp/.git/
+        A       ntp.txt
+r1 = 57e98c069857970829ef710900fa15171699d205 (refs/remotes/git-svn)
+        A       links.txt
+r2 = ad0bc8154956da9b732b432ff21c1e611e554c4c (refs/remotes/git-svn)
+Checked out HEAD:
+  svn+ssh://home/data/svnroot/software/daemons/ntp/ntp r2
+$
