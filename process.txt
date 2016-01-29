@@ -37,3 +37,102 @@ Options:
                      (not the commit log). 
                      -- jonmaddox.com/
 
+-- git-scm.com/book/en/v2/Git-and-Other-Systems-Migrating-to-Git
+
+
+5. Do a bit of post-import cleanup.  For one thing, you should
+clean up the weird references that git svn set up. First you'll move the
+tags so they're actual tags rather than strange remote branches, and then
+you'll move the rest of the branches so they're local.
+
+To move the tags to be proper Git tags, run:
+  $ cd ntp; cp -Rf .git/refs/remotes/origin/tags/* .git/refs/tags/
+  $ rm -Rf .git/refs/remotes/origin/tags
+
+-- git-scm.com/book/en/v2/Git-and-Other-Systems-Migrating-to-Git
+
+
+6. Next, move the rest of the references under refs/remotes to be local branches:
+  $ cp -Rf .git/refs/remotes/origin/* .git/refs/heads/
+  $ rm -Rf .git/refs/remotes/origin
+
+-- git-scm.com/book/en/v2/Git-and-Other-Systems-Migrating-to-Git
+
+
+7. It may happen that you'll see some extra branches which are suffixed by
+@xxx (where xxx is a number), while in Subversion you only see one branch.
+This is actually a Subversion feature called "peg-revisions", which is
+something that Git simply has no syntactical counterpart for.  Hence, git svn
+simply adds the svn version number to the branch name just in the same way as
+you would have written it in svn to address the peg-revision of that branch.
+If you do not care anymore about the peg-revisions, simply remove them using
+  $ git branch -d
+
+NOTE: This yields:
+      fatal: branch name required
+
+-- git-scm.com/book/en/v2/Git-and-Other-Systems-Migrating-to-Git
+
+
+8. There's one last thing to clean up.  Unfortunately, git svn creates an extra
+branch named trunk, which maps to Subversion's default branch, but the trunk
+ref points to the same place as master.  Since master is more idiomatically
+Git, here's how to remove the extra branch:
+  $ git branch -d trunk
+
+-- git-scm.com/book/en/v2/Git-and-Other-Systems-Migrating-to-Git
+
+
+9. Create new github repo via command line to push migrated repo to:
+curl -u "USERNAME:PASSWORD" https://api.github.com/user/repos \
+-d '{"name":"'REPO'"}'
+
+where:
+  USERNAME - github username: marcilr
+  PASSWORD - github password
+  REPO -     New github repository name
+
+-- viget.com/extend/create-a-github-repo-from-the-command-line
+
+
+10. Add empty GitHub remote to push repo to:
+  $ git remote add <shortname> <url>
+
+For example:
+  bornite:~/svn/software/my_project$ git remote add \
+  origin https://github.com/marcilr/git-software
+
+  bornite:~/svn/software/my_project$ git remote -v
+  origin  https://github.com/marcilr/git-software (fetch)
+  origin  https://github.com/marcilr/git-software (push)
+  marcilr@bornite:~/svn/software/my_project$
+
+11. Push repo to GitHub:
+  $ git push origin --all
+  $ git push origin --tags
+
+All your branches and tags should be on your new Git server in a nice, clean
+import.
+
+-- git-scm.com/book/en/v2/Git-and-Other-Systems-Migrating-to-Git
+
+
+Links
+=====
+9.2 Git and Other Systems - Migrating to Git
+Git Pro, 2nd Edition (2014)
+https://git-scm.com/book/en/v2/Git-and-Other-Systems-Migrating-to-Git
+
+Cleanly Migrate Your Subversion Repository To a GIT Repository
+http://jonmaddox.com/2008/03/05/cleanly-migrate-your-subversion-repository-to-a-git-repository/
+
+Create a Github Repo from the Command Line
+The command:
+  curl -u "$username:$token" https://api.github.com/user/repos \
+  -d '{"name":"'$repo_name'"}'
+https://viget.com/extend/create-a-github-repo-from-the-command-line
+
+git-svn(1) Manual Page
+git-svn - Bidirectional operation between a Subversion repository and git
+git --local-branching-on-the-cheap
+https://git-scm.com/docs/git-svn/1.7.7.2
