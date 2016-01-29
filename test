@@ -9,6 +9,7 @@
 # =====================================
 # Configuration
 # =====================================
+AUTHORS=./authors.txt
 REPO=svn+ssh://home/data/svnroot/software/daemons/ntp/ntp
 
 # =====================================
