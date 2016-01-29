@@ -128,6 +128,11 @@ ARGCOUNT=$#
 
 debug "main: ARGCOUNT=$#"
 
+# Abort with usage if there are not 2 arguments
 if [ ${ARGCOUNT} != 2 ]; then
   usage
 fi
+
+
+
+#git svn clone svn+ssh://home/data/svnroot/software/daemons/ntp/ntp --authors-file=./users.txt --no-metadata ntp
