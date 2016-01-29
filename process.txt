@@ -23,3 +23,17 @@ $ rm -rf ntp
 4. In present working directory use "git svn clone" to convert "ntp" repo:
 $ git svn clone svn+ssh://home/data/svnroot/software/daemons/ntp/ntp \
 --authors-file=./authors.txt --no-metadata ntp
+
+Options:
+  --authors-file     If this option is specified and git svn encounters an
+                     SVN committer name that does not exist in the authors-file,
+                     git svn will abort operation.  The user will then have to
+                     add the appropriate entry.  Re-running the previous git
+                     svn command after the authors-file is modified should
+                     continue operation.
+                     -- git-scm.com/docs/git-svn/1.7.7.2
+
+  --no-metadata      This flag tells GIT to leave all the SVN details behind
+                     (not the commit log). 
+                     -- jonmaddox.com/
+
