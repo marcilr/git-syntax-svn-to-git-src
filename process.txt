@@ -83,13 +83,14 @@ Git, here's how to remove the extra branch:
 -- git-scm.com/book/en/v2/Git-and-Other-Systems-Migrating-to-Git
 
 
-9. Create new github repo via command line to push migrated repo to:
-curl -u "USERNAME:PASSWORD" https://api.github.com/user/repos \
--d '{"name":"'REPO'"}'
+9. Create new github repo via command line to push migrated repo to  
+
+$ curl -H "Authorization: token ${TOKEN}" \
+https://api.github.com/user/repos -d '{\"name\": \"${REPO}\"}'
 
 where:
   USERNAME - github username: marcilr
-  PASSWORD - github password
+  TOKEN -    github token
   REPO -     New github repository name
 
 -- viget.com/extend/create-a-github-repo-from-the-command-line
