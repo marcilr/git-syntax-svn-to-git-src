@@ -151,4 +151,22 @@ process-cli-args
 debug "main: AUTHORS = ${AUTHORS}"
 debug "main: SVNREPO = ${SVNREPO}"
 
+# Verify that AUTHORS file exists
+if [ -f ${AUTHORS} ]; then
+  debug "main: Found ${AUTHORS}"
+else
+  message "${AUTHORS} not found, aborting."
+  exit 1
+fi
+
+# Get REPO name from end of SVNREPO string
+REPO=`echo ${SVNREPO} | sed 's:.*/::g'`
+debug "main: REPO = ${REPO}"
+
+# Check if REPO exists already
+if [ -d ${REPO} ]; then
+  message "${REPO} exists already, aborting."
+  exit 1
+fi
+
 #git svn clone svn+ssh://home/data/svnroot/software/daemons/ntp/ntp --authors-file=./users.txt --no-metadata ntp
