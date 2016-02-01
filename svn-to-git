@@ -19,10 +19,6 @@
 DEBUG=true
 
 
-# Subversion users
-AUTHORS=users.txt
-
-
 # ==============================================
 # Binaries
 # ==============================================
@@ -92,14 +88,14 @@ function usage(){
 #
 function process-cli-args(){
 
-  debug "process-cli-args(): START"
+  debug "process-cli-args() START"
 
   # Display number of command line arguments
-  debug "process-cli-args(): number args=${#commandline_args[@]}"
+  debug "process-cli-args() number args=${#commandline_args[@]}"
 
   # Loop over command line arguments (in correct order).
-  for arg in "${commandline_args[@]}"; do
-    case ${arg} in
+  for ARG in "${commandline_args[@]}"; do
+    case ${ARG} in
       "-d" | "--debug")
         DEBUG=true
         debug "DEBUG=true"
@@ -109,11 +105,20 @@ function process-cli-args(){
         exit 0
         ;;
       *)
+        debug "process-cli-args() processing: ${ARG}"
+       # If AUTHORS is set save SVNREPO
+       if [ -v AUTHORS ]; then
+            SVNREPO=${ARG}
+            debug "process-cli-args() SVNREPO=${SVNREPO}"
+        else
+            AUTHORS=${ARG}
+            debug "process-cli-args() AUTHORS=${AUTHORS}"
+        fi
         ;;
     esac
   done
 
-  debug "process-cli-args(): END"
+  debug "process-cli-args() END"
 
 } # end process-cli-args()
 
@@ -125,7 +130,6 @@ function process-cli-args(){
 
 # Check argument count
 ARGCOUNT=$#
-
 debug "main: ARGCOUNT=$#"
 
 # Abort with usage if there are not 2 arguments
@@ -133,7 +137,13 @@ if [ ${ARGCOUNT} != 2 ]; then
   usage
 fi
 
+# Get copy of command line arguments
+commandline_args=("$@")
+
 # Process command line arguments
 process-cli-args
+
+debug "main: AUTHORS = ${AUTHORS}"
+debug "main: SVNREPO = ${SVNREPO}"
 
 #git svn clone svn+ssh://home/data/svnroot/software/daemons/ntp/ntp --authors-file=./users.txt --no-metadata ntp
