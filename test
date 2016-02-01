@@ -9,11 +9,65 @@
 # =====================================
 # Configuration
 # =====================================
+
+#
+# Enable/disable debugging.
+#
+DEBUG=true
+
+# Authors file generated with svn-to-git-authors
 AUTHORS=./authors.txt
+
+# Subversion repo to convert to git
 REPO=svn+ssh://home/data/svnroot/software/daemons/ntp/ntp
+
 
 # =====================================
 # Binaries
 # =====================================
 SUBVERSION=/usr/bin/svn
 SVNTOGIT=./svn-to-git
+
+
+# =====================================
+# Functions
+# =====================================
+
+#
+# debug()
+# Output debugging text.
+# INPUT: $1 - Text to output if DEBUG="
+#
+function debug {
+
+  if [ ${DEBUG} = "true" ]; then
+    echo "debug() ${1}"
+  fi
+
+}
+
+#
+# message()
+# Display specified message passed as argument.
+#
+# INPUT
+# =====
+# Message to display as argument.
+#
+# RESULTS
+# =======
+# Displays argument to stdio.
+#
+function message {
+
+  echo ${1}
+
+}
+
+
+# =====================================
+# Main
+# =====================================
+
+# Execute svn-to-git
+${SVNTOGIT} ${AUTHORS} ${REPO}
