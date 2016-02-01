@@ -106,7 +106,12 @@ function process-cli-args(){
         ;;
       *)
         debug "process-cli-args() processing: ${ARG}"
+       #
        # If AUTHORS is set save SVNREPO
+       #
+       # How do I check if a variable exists in bash?
+       # http://unix.stackexchange.com/questions/212183/how-do-i-check-if-a-variable-exists-in-bash
+       #
        if [ -v AUTHORS ]; then
             SVNREPO=${ARG}
             debug "process-cli-args() SVNREPO=${SVNREPO}"
