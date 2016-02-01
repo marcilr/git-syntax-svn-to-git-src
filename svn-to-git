@@ -8,6 +8,21 @@
 # Usage:
 #   svn-to-git <subversion repo to convert>
 #
+#
+# Links
+# =====
+# 9.2 Git and Other Systems - Migrating to Git
+# Git Pro, 2nd Edition (2014)
+# https://git-scm.com/book/en/v2/Git-and-Other-Systems-Migrating-to-Git
+#
+# Cleanly Migrate Your Subversion Repository To a GIT Repository
+# http://jonmaddox.com/2008/03/05/cleanly-migrate-your-subversion-repository-to-a-git-repository/
+#
+# git-svn(1) Manual Page
+# git-svn - Bidirectional operation between a Subversion repository and git
+# git --local-branching-on-the-cheap
+# https://git-scm.com/docs/git-svn/1.7.7.2
+#
 
 # ==============================================
 # Configuration
@@ -170,7 +185,24 @@ if [ -d ${REPO} ]; then
   exit 1
 fi
 
+#
 # Build git command to clone subversion repo as git repo
+#
+# Options:
+# --authors-file     If this option is specified and git svn encounters an
+#                    SVN committer name that does not exist in the authors-file,
+#                    git svn will abort operation.  The user will then have to
+#                    add the appropriate entry.  Re-running the previous git
+#                    svn command after the authors-file is modified should
+#                    continue operation.
+#                    -- git-scm.com/docs/git-svn/1.7.7.2
+#
+# --no-metadata      This flag tells GIT to leave all the SVN details behind
+#                    (not the commit log).
+#                    -- jonmaddox.com/
+#
+# -- git-scm.com/book/en/v2/Git-and-Other-Systems-Migrating-to-Git
+#
 CMD="${GIT} svn clone ${SVNREPO}"
 CMD+=" --authors-file=${AUTHORS}"
 CMD+=" --no-metadata"
@@ -182,3 +214,4 @@ debug "main: CMD=${CMD}"
 # Execute command to clone subversion repo as git repo
 debug "main: Executing: ${CMD}"
 eval ${CMD}
+
