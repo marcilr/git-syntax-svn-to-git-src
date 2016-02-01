@@ -23,6 +23,7 @@ DEBUG=true
 # Binaries
 # ==============================================
 AWK=/usr/bin/awk
+GIT=/usr/bin/git
 GREP=/bin/grep
 PERL=/usr/bin/perl
 SED=/bin/sed
@@ -169,4 +170,15 @@ if [ -d ${REPO} ]; then
   exit 1
 fi
 
-#git svn clone svn+ssh://home/data/svnroot/software/daemons/ntp/ntp --authors-file=./users.txt --no-metadata ntp
+# Build git command to clone subversion repo as git repo
+CMD="${GIT} svn clone ${SVNREPO}"
+CMD+=" --authors-file=${AUTHORS}"
+CMD+=" --no-metadata"
+CMD+=" ${REPO}"
+
+debug "main: CMD=${CMD}"
+
+
+# Execute command to clone subversion repo as git repo
+debug "main: Executing: ${CMD}"
+eval ${CMD}
