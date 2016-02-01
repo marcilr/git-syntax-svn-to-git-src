@@ -115,7 +115,7 @@ function process-cli-args(){
 
   debug "process-cli-args(): END"
 
-}
+} # end process-cli-args()
 
 
 
@@ -133,6 +133,7 @@ if [ ${ARGCOUNT} != 2 ]; then
   usage
 fi
 
-
+# Process command line arguments
+process-cli-args
 
 #git svn clone svn+ssh://home/data/svnroot/software/daemons/ntp/ntp --authors-file=./users.txt --no-metadata ntp
