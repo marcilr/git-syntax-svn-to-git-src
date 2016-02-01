@@ -69,5 +69,11 @@ function message {
 # Main
 # =====================================
 
+# Execute with no arguments
+message "Execute with no arguments"
+${SVNTOGIT}
+
+message
+message "Execute with arguments"
 # Execute svn-to-git
 ${SVNTOGIT} ${AUTHORS} ${REPO}
