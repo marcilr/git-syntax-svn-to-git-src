@@ -181,7 +181,7 @@ debug "main: REPO = ${REPO}"
 
 # Check if REPO exists already
 if [ -d ${REPO} ]; then
-  message "${REPO} exists already, aborting."
+  message "${REPO} directory exists already, aborting."
   exit 1
 fi
 
@@ -214,4 +214,3 @@ debug "main: CMD=${CMD}"
 # Execute command to clone subversion repo as git repo
 debug "main: Executing: ${CMD}"
 eval ${CMD}
-
