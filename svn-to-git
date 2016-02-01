@@ -41,6 +41,7 @@ AWK=/usr/bin/awk
 GIT=/usr/bin/git
 GREP=/bin/grep
 PERL=/usr/bin/perl
+RM=/bin/rm
 SED=/bin/sed
 SORT=/usr/bin/sort
 SVN=/usr/bin/svn
@@ -213,4 +214,58 @@ debug "main: CMD=${CMD}"
 
 # Execute command to clone subversion repo as git repo
 debug "main: Executing: ${CMD}"
-eval ${CMD}
+eval "${CMD}"
+
+#
+# Do a bit of post-import cleanup.  For one thing, you should
+# clean up the weird references that git svn set up. First you'll move the
+# tags so they're actual tags rather than strange remote branches, and then
+# you'll move the rest of the branches so they're local.
+# -- git-scm.com/book/en/v2/Git-and-Other-Systems-Migrating-to-Git
+#
+
+CMD="cd ${REPO}; cp -Rf .git/refs/remotes/origin/tags/* .git/refs/tags/"
+debug "main: Executing: ${CMD}"
+eval "${CMD}"
+
+CMD="${RM} -Rf .git/refs/remotes/origin/tags"
+debug "main: Executing: ${CMD}"
+eval "${CMD}"
+
+
+#
+# Next, move the rest of the references under refs/remotes to be local branches:
+# -- git-scm.com/book/en/v2/Git-and-Other-Systems-Migrating-to-Git
+#
+CMD="cp -Rf .git/refs/remotes/origin/* .git/refs/heads/"
+debug "main: Executing: ${CMD}"
+eval "${CMD}"
+
+CMD="${RM} -Rf .git/refs/remotes/origin"
+debug "main: Executing: ${CMD}"
+eval "${CMD}"
+
+#
+# It may happen that you'll see some extra branches which are suffixed by
+# @xxx (where xxx is a number), while in Subversion you only see one branch.
+# This is actually a Subversion feature called "peg-revisions", which is
+# something that Git simply has no syntactical counterpart for.  Hence, git svn
+# simply adds the svn version number to the branch name just in the same way as
+# you would have written it in svn to address the peg-revision of that branch.
+# If you do not care anymore about the peg-revisions, simply remove them using
+# -- git-scm.com/book/en/v2/Git-and-Other-Systems-Migrating-to-Git
+#
+CMD="${GIT} branch -d"
+debug "main: Executing: ${CMD}"
+eval "${CMD}"
+
+#
+# There's one last thing to clean up.  Unfortunately, git svn creates an extra
+# branch named trunk, which maps to Subversion's default branch, but the trunk
+# ref points to the same place as master.  Since master is more idiomatically
+# Git, here's how to remove the extra branch:
+# -- git-scm.com/book/en/v2/Git-and-Other-Systems-Migrating-to-Git
+#
+CMD="${GIT} branch -d trunk"
+debug "main: Executing: ${CMD}"
+eval "${CMD}"
