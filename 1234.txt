@@ -1,0 +1,41 @@
+1234.txt
+Created Mon Feb  1 10:31:55 AKST 2016
+Copyright (C) 2016 by Raymond E. Marcil <marcilr@gmail.com>
+
+
+Convert subversion repository to git:
+
+
+1. Checkout copy of subversion repo, create authors.txt file,
+and remove checked out subversion repo:
+
+Checkout subversion repo:
+  $ svn co svn+ssh://home/data/svnroot/software/daemons/ntp/ntp
+  A    ntp/links.txt
+  A    ntp/ntp.txt
+  Checked out revision 2.
+  $
+
+Create authors.txt file:
+  $ cd ntp; svn-to-git-authors > ../authors.txt; cd ..
+  $
+
+Remove checked out subversion repo:
+  $ rm -rf ntp
+
+2. Use svn-to-git, git svn clone wrapper, to convert subversion repo to git:
+  $ svn-to-git ./authors svn+ssh://home/data/svnroot/software/daemons/ntp/ntp
+
+3. Create github repository with github-repo-create:
+  $ github-repo-create git-software-daemons-ntp
+
+4. Added empty github remote to repo and push content to it:
+  $ cd ntp
+
+Add empty github remote
+  $ git remote add \
+    origin https://github.com/marcilr/git-software-daemons-ntp
+
+Push repo to GitHub:
+  $ git push origin --all
+  $ git push origin --tags
