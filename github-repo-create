@@ -1,0 +1,364 @@
+#!/bin/bash
+# github-create
+# Created Fri Nov 13 15:02:21 AKST 2015
+# Copyright (C) 2015 by Raymond E. Marcil <marcilr@gmail.com>
+#
+# Create a Github Repo from the Command Line
+# Has github-create() function for creating new GitHub repos
+# via cli.
+#
+# Must configure  Github username and Personal Access Token
+# for it to work:
+#   $ git config --global github.user marcilr
+#   $ git config --global github.token <token>
+#
+#
+# To git clean list of repos:
+#   $ curl -s https://api.github.com/users/marcilr/repos | grep '"name":'
+#   "name": ".repo",
+#   "name": "bar",
+#   "name": "foo",
+#   ...
+#   "name": "git-security-filesystem",
+#   $
+#
+# -- GitHub[ebooksfeed.com].pdf, p. 20
+#
+# Links
+# =====
+# A curl tutorial using GitHub's API
+# Great documentation and syntax here
+# Create repo:
+#   curl -H "Authorization: token PUT-YOUR-AUTH-TOKEN-HERE" \
+#   https://api.github.com/user/repos \
+#   -d '{"name": "PUT-YOUR-REPO-NAME-HERE"}'
+# https://gist.github.com/caspyin/2288960
+#
+# GitHub API docmentation
+# Great documentation here
+# https://developer.github.com/v3/
+#
+
+
+
+# ==============================================
+# Configuration
+# ==============================================
+
+#
+# Enable/disable debugging.
+#
+DEBUG=true
+
+#
+# GitHub credentials file with USER, PASS, EMAIL,
+# and TOKEN to access github repo.
+#
+CREDENTIALS=/home/${USERNAME}/.github
+
+# Initialize array of github repo names to create
+REPOS=()
+
+# ==============================================
+# Binaries
+# ==============================================
+CURL=/usr/bin/curl
+
+
+# ==============================================
+# Functions
+# ==============================================
+
+#
+# debug()
+# Output debugging text.
+# INPUT: $1 - Text to output if DEBUG="
+#
+function debug {
+
+  if [ ${DEBUG} = "true" ]; then
+    echo "debug() ${1}"
+  fi
+
+}
+
+
+#
+# message()
+# Display specified message passed as argument.
+#
+# INPUT
+# =====
+# Message to display as argument.
+#
+# RESULTS
+# =======
+# Displays argument to stdio.
+#
+function message {
+
+  echo ${1}
+
+}
+
+
+#
+# usage()
+# Display usage and exit.
+#
+function usage(){
+  message "Usage: ${0} <github repo name>"
+  message "   -d | --debug   Enable debugging."
+  message "   -h | --help    Create non-hierarchical repository."
+}
+
+
+#
+# process-cli-args()
+#
+# Links
+# =====
+# How to process command-line args in bash scripts
+# http://debaan.blogspot.com/2007/06/how-to-process-command-line-args-in.html
+#
+function process-cli-args(){
+
+  debug "process-cli-args() START"
+
+  # Get argument count
+  ARGCOUNT="${#COMMANDLINE_ARGS[@]}"
+  debug "process-cli-args() ARGCOUNT=${ARGCOUNT}"
+
+  # Abort with error with no arguments
+  if [ "${ARGCOUNT}" -eq 0 ]; then
+    usage
+    exit 1
+  fi
+
+  # Display number of command line arguments
+  debug "process-cli-args() number args=${#COMMANDLINE_ARGS[@]}"
+
+  # Loop over command line arguments (in correct order).
+  for ARG in "${COMMANDLINE_ARGS[@]}"; do
+    case ${ARG} in
+      "-d" | "--debug")
+        DEBUG=true
+        debug "process-cli-args() DEBUG=true"
+        ;;
+      "-h" | "--help")
+        usage
+        exit 0
+        ;;
+      *)
+        if [ ${#REPOS[@]} -eq 0 ]; then
+          REPOS[1]="${ARG}"
+          debug "process-cli-args() REPO=${ARG}"
+        else
+          REPOS+="${ARG}"
+          debug "process-cli-args() appending REPO=${ARG}"
+        fi
+        ;;
+    esac
+  done
+
+  REPOCOUNT="${#REPOS[@]}"
+  debug "process-cli-args() REPOCOUNT=${REPOCOUNT}"
+
+  debug "process-cli-args() END"
+
+}
+
+
+#
+# get-credentials()
+# Get USER, PASS, TOKEN, and EMAIL credentials
+# from ~/.github
+#
+# INPUT  - ~/.github
+# OUTPUT - Sets  USER, PASS, TOKEN, and EMAIL credentials
+#
+function get-credentials {
+
+    debug "get-credentials() START"
+
+    #
+    # Source github crentials from ~/.github
+    #
+    debug "main: CREDENTIALS: ${CREDENTIALS}"
+    if [ ! -f ${CREDENTIALS} ]; then
+        message "~/.github file, with GitHub credentials (USER,PASS,EMAIL,TOKEN), not found, aborting."
+        exit 1
+    fi
+
+    . ${CREDENTIALS}
+    debug "get-credentials() USER = ${USER}"
+    debug "get-credentials() PASS = ***"
+    debug "get-credentials() EMAIL = ${EMAIL}"
+    debug "get-credentials() TOKEN = ***"
+    
+    debug "get-credentials() END"
+
+} # end get-credentails()
+
+
+
+#
+# repos-verify()
+# Verify REPOS array had values.
+# Abort if REPOS empty.
+#
+# INPUT  - REPOS array with github repos to create
+# OUTPUT - Outputs repos to stdout in debug mode
+# USES -   debug(), message()
+#
+function repos-verify {
+
+    debug "repos-verify() START"
+
+    # Verify repos to create
+    if [ -z "${REPOS}" ]; then
+        message "No repos specified, aborting."
+    else
+        REPOCOUNT="${#REPOS[@]}"
+        debug "repos-verify: REPOCOUNT=${REPOCOUNT}"
+    fi
+    
+    debug "repos-verify() END"
+
+} # end repos-verify()
+
+
+#
+# repos-get-paths()
+# Get github https and ssh repo paths
+#
+# INPUT  - REPO to use in paths
+# OUTPUT - REPOHTTPSPATH https github repo path
+#          REPOSSHPAT ssh gtihub repo path
+# USES -   debug()
+#
+function repos-get-paths {
+
+    debug "repos-get-paths() START"
+
+    REPOHTTPSPATH="https://api.github.com/repos/marcilr/${REPO}"
+    debug "main: REPOHTTPSPATH = ${REPOHTTPSPATH}"
+
+    REPOSSHPATH="ssh://git@github.com/marcilr/${REPO}"
+    debug "main: REPOSSHPATH = ${REPOSSHPATH}"
+    
+    debug "repos-gte-paths() END"
+
+} # end repos-get-paths()
+
+
+#
+# repos-loop()
+# Loop over REPOS array and create repos using curl
+#
+# INPUT  - REPOS array with github repos to create
+# OUTPUT - Create github repos using curl
+# USES -   debug()
+#
+function repos-loop {
+
+    debug "repos-loop() START"
+
+    #
+    # Loop over repos from cli and create as needed.
+    #
+    for REPO in "${REPOS[@]}"; do
+        debug "main: REPO=${REPO}"
+
+        #
+        # Get REPOHTTPSPATH and REPOSSHPATH github repo
+        # paths with REPO value.
+        #
+        repos-get-paths
+
+        #
+        # Check that github repository does not exist using:
+        #   curl https://api.github.com/repos/<user>/<repo>
+        #
+        # If repo *does not* exist RESULT will contain:
+        # {
+        #   "message": "Not Found",
+        #   "documentation_url": "https://developer.github.com/v3"
+        # }
+        #
+        # The use of curl seems more straightforward that he use of:
+        #   git ls-remote ssh://git@github.com/<user>/<repo>
+        #
+        # If repo *does not* exist RESULT will contain:
+        #   "ERROR: Repository not found."
+        #
+        # Check that git repository exists
+        # http://stackoverflow.com/questions/23914896/check-that-git-repository-exists
+        #
+ 
+        RESULT=`curl ${REPOHTTPSPATH} 2>/dev/null`
+        #debug "main: RESULT = ${RESULT}"
+
+        #
+        # NOTE: Send error to /dev/null to suppress output like:
+        #   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+        #                                Dload  Upload   Total   Spent    Left  Speed
+        # 100    87  100    87    0     0    170      0 --:--:-- --:--:-- --:--:--   170
+        #
+        if [[ ${RESULT} == *"Not Found"* ]]; then
+            echo "${REPO} repo not found, creating..."
+
+           #
+           # Create github repo via command line
+           #
+           # Links
+           # =====
+           # Create a Github Repo from the Command Line
+	   #   curl -u "$username:$token" https://api.github.com/user/repos \
+           #   -d '{"name":"'$repo_name'"}'
+           # https://viget.com/extend/create-a-github-repo-from-the-command-line
+           #
+           # $ curl -H "Authorization: token ${TOKEN}" \
+           # https://api.github.com/user/repos -d '{"name": "REPO"}'
+           #
+           CMD="${CURL} -H \"Authorization: token ${TOKEN}\" "
+           CMD+="https://api.github.com/user/repos -d '{\"name\": \"${REPO}\"}'"
+           debug "main: CMD=${CMD}"
+
+           # Evaluate command to create repository
+           eval "${CMD}"
+
+       else
+           echo "${REPO} repo already exists"
+       fi
+
+    done   # end  for REPO in "${REPOS[@]}"; do
+
+    debug "repos-loop() END"
+
+} # end repos-loop()
+
+
+# ======================== Main =========================
+# ======================== Main =========================
+
+#
+# Get github USER, PASS, TOKEN, and EMAIL
+# credentials from ~/.github
+#
+get-credentials
+
+#
+# Save command line arguments in global variable for use
+# by process-cli-args().
+#
+COMMANDLINE_ARGS=("$@")
+
+# Process command line arguments
+process-cli-args
+
+# Verify repos to create
+repos-verify
+
+# Loop over REPOS array and create githb repos
+repos-loop
