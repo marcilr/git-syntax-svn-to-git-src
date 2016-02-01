@@ -24,7 +24,7 @@ Remove checked out subversion repo:
   $ rm -rf ntp
 
 2. Use svn-to-git, git svn clone wrapper, to convert subversion repo to git:
-  $ svn-to-git ./authors svn+ssh://home/data/svnroot/software/daemons/ntp/ntp
+  $ svn-to-git ./authors.txt svn+ssh://home/data/svnroot/software/daemons/ntp/ntp
 
 3. Create github repository with github-repo-create:
   $ github-repo-create git-software-daemons-ntp
