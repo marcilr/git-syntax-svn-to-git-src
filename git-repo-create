@@ -178,6 +178,18 @@ debug "main: REPOPATH = ${REPOPATH}"
 if [[ $REPOPATH == ssh://* ]]; then
     debug "main: Creating remote repo via ssh"
 
+    if [[ $REPOPATH == *htpc/* ]]; then
+        debug "main: Processing htpc path"
+    elif [[ $REPOPATH == *bornite/* ]]; then
+        debug "main: Processing bornite path"
+    elif [[ $REPOPATH == *malachite/* ]]; then
+        debug "main: Processing malachite path"
+    elif [[ $REPOPATH == *home/* ]]; then
+        debug "main: Processing home path"
+    elif [[ $REPOPATH == *github/* ]]; then
+        debug "main: Processing github path"
+    fi
+
 elif [[ $REPOPATH == https://* ]]; then
     debug "main: Creating remote repo via https"
 
