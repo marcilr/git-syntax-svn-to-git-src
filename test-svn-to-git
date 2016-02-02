@@ -62,3 +62,14 @@ function message {
 }
 
 
+# ==============================================
+# MAIN
+# ==============================================
+
+
+# Build conversion command
+CMD="${SVNTOGIT} ${SVNPATH} ${GITPATH}"
+debug "Executing: ${CMD}"
+
+# Execute conversion command
+eval "${CMD}"
