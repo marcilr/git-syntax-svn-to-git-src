@@ -76,20 +76,3 @@ debug "Executing: ${CMD}"
 
 # Execute conversion command
 eval "${CMD}"
-
-
-SVNREPO=`echo ${SVNPATH} | ${SED} 's:.*/::g'`
-SVNREPO="${SVNREPO}-svn"
-debug "main: SVNREPO = ${SVNREPO}"
-
-GITREPO=`echo ${GITPATH} | ${SED} 's:.*/::g'`
-debug "main: GITREPO = ${GITREPO}"
-
-# Checkout subversion repo:
-if [ ! -d "${SVNREPO}" ]; then
-    ${SVN} co ${SVNPATH} ${SVNREPO}
-fi
-
-# Get authors.txt with svn-to-git-authors
-cd ${SVNREPO}; ${SVNTOGITAUTHORS} > ${AUTHORS}; cd ..
-
