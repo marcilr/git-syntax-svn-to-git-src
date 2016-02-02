@@ -186,6 +186,7 @@ else
         message "${REPOPATH} exists already, aborting."
         exit 1
     else
+        # Create git repo on local filesystem
         debug "main: Creating ${REPOPATH} directory"
         ${MKDIR} -p "${REPOPATH}"
         ${CHMOD} 775 "${REPOPATH}"
