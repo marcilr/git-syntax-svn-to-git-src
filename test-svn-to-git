@@ -6,3 +6,59 @@
 # Test svn-git-conversion of subversion repo to git repo.
 #
 
+# ==============================================
+# Configuration
+# ==============================================
+
+#
+# Enable/disable debugging.
+#
+DEBUG=true
+
+SVNPATH=svn+ssh://home/data/svnroot/gci/gci
+GITPATH=ssh://marcilr@home/data/git/gci
+
+
+# ==============================================
+# Binaries
+# ==============================================
+SVNTOGIT=./svn-to-git
+
+
+# ==============================================
+# Functions
+# ==============================================
+
+#
+# debug()
+# Output debugging text.
+# INPUT: $1 - Text to output if DEBUG="
+#
+function debug {
+
+  if [ ${DEBUG} = "true" ]; then
+    echo "debug() ${1}"
+  fi
+
+}
+
+
+#
+# message()
+# Display specified message passed as argument.
+#
+# INPUT
+# =====
+# Message to display as argument.
+#
+# RESULTS
+# =======
+# Displays argument to stdio.
+#
+function message {
+
+  echo ${1}
+
+}
+
+
