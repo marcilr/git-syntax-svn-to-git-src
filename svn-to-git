@@ -1,27 +1,10 @@
 #!/bin/bash
 # svn-to-git
-# Created Wed Jan 27 15:55:10 AKST 2016
+# Created Mon Feb  1 15:28:03 AKST 2016
 # Copyright (C) 2016 by Raymond E. Marcil <marcilr@gmail.com>
 #
-# Convert subversion repository to git
-#
-# Usage:
-#   svn-to-git <subversion repo to convert>
-#
-#
-# Links
-# =====
-# 9.2 Git and Other Systems - Migrating to Git
-# Git Pro, 2nd Edition (2014)
-# https://git-scm.com/book/en/v2/Git-and-Other-Systems-Migrating-to-Git
-#
-# Cleanly Migrate Your Subversion Repository To a GIT Repository
-# http://jonmaddox.com/2008/03/05/cleanly-migrate-your-subversion-repository-to-a-git-repository/
-#
-# git-svn(1) Manual Page
-# git-svn - Bidirectional operation between a Subversion repository and git
-# git --local-branching-on-the-cheap
-# https://git-scm.com/docs/git-svn/1.7.7.2
+# Wrapper script to convert subversion repo to git.
+# Converted script is then pushed to the specified target.
 #
 
 # ==============================================
@@ -90,9 +73,13 @@ function message {
 # Display usage and exit.
 #
 function usage(){
-  message "Usage: ${0} <authors> <subversion repo>"
+  message "Usage: ${0} <subversion repo> <git repo>"
   message "   -d | --debug   Enable debugging."
   message "   -h | --help    Create non-hierarchical repository."
+  message "   <subversion src repo> - like:"
+  message "       svn+ssh://home/data/svnroot/software/daemons/ntp/ntp"
+  message "   <git src repo> - like:"
+  message "       ssh://git@github.com/marcilr/git-software-daemons-ntp"
 }
 
 #
@@ -145,7 +132,6 @@ function process-cli-args(){
 } # end process-cli-args()
 
 
-
 # ==============================================
 # Main
 # ==============================================
@@ -165,107 +151,3 @@ commandline_args=("$@")
 # Process command line arguments
 process-cli-args
 
-debug "main: AUTHORS = ${AUTHORS}"
-debug "main: SVNREPO = ${SVNREPO}"
-
-# Verify that AUTHORS file exists
-if [ -f ${AUTHORS} ]; then
-  debug "main: Found ${AUTHORS}"
-else
-  message "${AUTHORS} not found, aborting."
-  exit 1
-fi
-
-# Get REPO name from end of SVNREPO string
-REPO=`echo ${SVNREPO} | sed 's:.*/::g'`
-debug "main: REPO = ${REPO}"
-
-# Check if REPO exists already
-if [ -d ${REPO} ]; then
-  message "${REPO} directory exists already, aborting."
-  exit 1
-fi
-
-#
-# Build git command to clone subversion repo as git repo
-#
-# Options:
-# --authors-file     If this option is specified and git svn encounters an
-#                    SVN committer name that does not exist in the authors-file,
-#                    git svn will abort operation.  The user will then have to
-#                    add the appropriate entry.  Re-running the previous git
-#                    svn command after the authors-file is modified should
-#                    continue operation.
-#                    -- git-scm.com/docs/git-svn/1.7.7.2
-#
-# --no-metadata      This flag tells GIT to leave all the SVN details behind
-#                    (not the commit log).
-#                    -- jonmaddox.com/
-#
-# -- git-scm.com/book/en/v2/Git-and-Other-Systems-Migrating-to-Git
-#
-CMD="${GIT} svn clone ${SVNREPO}"
-CMD+=" --authors-file=${AUTHORS}"
-CMD+=" --no-metadata"
-CMD+=" ${REPO}"
-
-debug "main: CMD=${CMD}"
-
-
-# Execute command to clone subversion repo as git repo
-debug "main: Executing: ${CMD}"
-eval "${CMD}"
-
-#
-# Do a bit of post-import cleanup.  For one thing, you should
-# clean up the weird references that git svn set up. First you'll move the
-# tags so they're actual tags rather than strange remote branches, and then
-# you'll move the rest of the branches so they're local.
-# -- git-scm.com/book/en/v2/Git-and-Other-Systems-Migrating-to-Git
-#
-
-CMD="cd ${REPO}; cp -Rf .git/refs/remotes/origin/tags/* .git/refs/tags/"
-debug "main: Executing: ${CMD}"
-eval "${CMD}"
-
-CMD="${RM} -Rf .git/refs/remotes/origin/tags"
-debug "main: Executing: ${CMD}"
-eval "${CMD}"
-
-
-#
-# Next, move the rest of the references under refs/remotes to be local branches:
-# -- git-scm.com/book/en/v2/Git-and-Other-Systems-Migrating-to-Git
-#
-CMD="cp -Rf .git/refs/remotes/origin/* .git/refs/heads/"
-debug "main: Executing: ${CMD}"
-eval "${CMD}"
-
-CMD="${RM} -Rf .git/refs/remotes/origin"
-debug "main: Executing: ${CMD}"
-eval "${CMD}"
-
-#
-# It may happen that you'll see some extra branches which are suffixed by
-# @xxx (where xxx is a number), while in Subversion you only see one branch.
-# This is actually a Subversion feature called "peg-revisions", which is
-# something that Git simply has no syntactical counterpart for.  Hence, git svn
-# simply adds the svn version number to the branch name just in the same way as
-# you would have written it in svn to address the peg-revision of that branch.
-# If you do not care anymore about the peg-revisions, simply remove them using
-# -- git-scm.com/book/en/v2/Git-and-Other-Systems-Migrating-to-Git
-#
-CMD="${GIT} branch -d"
-debug "main: Executing: ${CMD}"
-eval "${CMD}"
-
-#
-# There's one last thing to clean up.  Unfortunately, git svn creates an extra
-# branch named trunk, which maps to Subversion's default branch, but the trunk
-# ref points to the same place as master.  Since master is more idiomatically
-# Git, here's how to remove the extra branch:
-# -- git-scm.com/book/en/v2/Git-and-Other-Systems-Migrating-to-Git
-#
-CMD="${GIT} branch -d trunk"
-debug "main: Executing: ${CMD}"
-eval "${CMD}"
