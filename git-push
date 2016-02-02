@@ -1,10 +1,10 @@
 #!/bin/bash
-# github-push
+# git-push
 # Created Tue Feb  2 08:36:22 AKST 2016
 # Copyright (C) 2016 by Raymond E. Marcil <marcilr@gmail.com>
 #
-# Push specified local git repository to newly created github
-# repository.
+# Push specified local git repository to arbitrary remote git repo.
+#   git-push <git repo> <github repo>
 #
 
 
