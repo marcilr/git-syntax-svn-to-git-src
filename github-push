@@ -17,6 +17,12 @@
 #
 DEBUG=true
 
+#
+# GitHub credentials file with USER, PASS, EMAIL,
+# and TOKEN to access github repo.
+#
+CREDENTIALS=/home/${USERNAME}/.github
+
 
 # ==============================================
 # Binaries
@@ -137,10 +143,22 @@ debug "github-push START"
 ARGCOUNT=$#
 debug "main: ARGCOUNT=$#"
 
-# Print usage and abort ig no arguments
+# Print usage and abort if no arguments
 if [ -z "$1" ]; then
   usage
   exit 1
+fi
+
+# Check for ~/.github credentials file and source
+if [ ! -f ${CREDENTIALS} ]; then
+  message "${CREDENTIALS} not found, aborting."
+  exit 1
+else
+  . ${CREDENTIALS}
+  debug "main: github USER = ${USER}"
+  debug "main: github PASS = ***"
+  debug "main: github EMAIL = ${EMAIL}"
+  debug "main: github TOKEN = ***"
 fi
 
 # Get copy of command line arguments
@@ -156,5 +174,8 @@ debug "main: GITHUBREPO = ${GITHUBREPO}"
 CMD="github-repo-create ${GITHUBREPO}"
 debug "main: Executing ${CMD}"
 eval "${CMD}"
+
+
+
 
 debug "github-push END"
