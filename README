@@ -19,7 +19,7 @@ process.txt
 svn-to-git
   Convert subversion repository to git
 
-svn-to-git-users
+svn-to-git-authors
   Script to extract users from subversion repository to users.txt file.
   The marcilr, and root users have users.txt entries cleaned up.
   Other users will have to have name and email updated in users.txt
