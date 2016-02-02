@@ -3,7 +3,7 @@
 # Created Tue Feb  2 09:08:24 AKST 2016
 # Copyright (C) 2016 by Raymond E. Marcil <marcilr@gmail.com>
 #
-# Test github-push to push local git repo to github.
+# Test git-push to push local git repo to github.
 #
 
 
