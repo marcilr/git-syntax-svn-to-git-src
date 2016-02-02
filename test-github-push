@@ -20,7 +20,7 @@ DEBUG=true
 GITREPO=net
 
 # GitHub repository to create and push to
-GITHUBREPO=git-net
+GITREMOTE=git-net
 
 # ==============================================
 # Binaries
@@ -70,10 +70,10 @@ function message {
 debug "test-github-push START"
 
 debug "main: GITREPO = ${GITREPO}"
-debug "main: GITHUBREPO = ${GITHUBREPO}"
+debug "main: GITREMOTE = ${GITREMOTE}"
 
 # Call github-push to create new github repo and push local git repo to it.
-CMD="${GITHUBPUSH} ${GITREPO} ${GITHUBREPO}"
+CMD="${GITHUBPUSH} ${GITREPO} ${GITREMOTE}"
 message "Executing: ${CMD}"
 eval "${CMD}"
 
