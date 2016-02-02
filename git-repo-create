@@ -30,7 +30,8 @@ CHMOD=/bin/chmod
 CHOWN=/bin/chown
 GIT=/usr/bin/git
 MKDIR=/bin/mkdir
-
+SED=/bin/sed
+SSH=/usr/bin/ssh
 
 # ==============================================
 # Functions
@@ -139,6 +140,69 @@ function process-cli-args(){
 } # end process-cli-args()
 
 
+#
+# process-home()
+# Process git repository creation for home target.
+#
+# Dependencies:
+# Relies on ~/.ssh/config being configured with bornite, htpc, home,
+# and malachite hosts for access to these systems.
+#
+function process-home(){
+
+  debug "process-home() START"
+  debug "process-home() SERVER = ${SERVER}"
+
+  #
+  # Get repo path to process
+  # Remove leading ssh://htpx or ssh://home
+  #
+  PATH=`echo ${REPOPATH} | ${SED} "s:.*$SERVER::g"`
+  debug "process-home() PATH = ${PATH}"
+
+  # Check if directory exists on host
+  CMD="${SSH} ${SERVER} 'if [ -d ${PATH} ]; then echo "exists"; fi'"
+  debug "process-home() Executing: ${CMD}"
+  RESULT=`eval "${CMD}"`
+
+  debug "process-home() RESULT = ${RESULT}"
+  if [ "${RESULT}" == "exists" ]; then
+      message "${PATH} exists already, *not* recreating."
+  else
+      message "Creating ${PATH} directory on ${SERVER}..."
+
+      # Create directory for git repo
+      CMD="${SSH} ${SERVER} '${MKDIR} -p ${PATH}'"
+      debug "process-home() Executing: ${CMD}"
+      eval "${CMD}"
+
+      # Initialize git repo
+      CMD="${SSH} ${SERVER} 'cd ${PATH}; /usr/bin/git init'"
+      debug "process-home() Executing: ${CMD}"
+      eval "${CMD}"
+
+      # Recursively set privs drwxrwsr-x on directory for git repo
+      CMD="${SSH} ${SERVER} '/bin/chmod -R 2775 ${PATH}'"
+      debug "process-home() Executing: ${CMD}"
+      eval "${CMD}"
+
+      # Check if ${PATH}/.git directory not exists on host
+      CMD="${SSH} ${SERVER} 'if [ -d ${PATH}/.git ]; then echo "exists"; fi'"
+      debug "process-home() Executing: ${CMD}"
+      RESULT=`eval "${CMD}"`
+
+      if [ "${RESULT}" == "exists" ]; then
+          message "process-home() Created ${REPOPATH} remote"
+      else
+          message "process-home() Failed to create ${REPOPATH} remote"
+      fi # end if [ "${RESULT}" == "exists" ]; then
+
+  fi # end if [ "${RESULT}" == "exists" ]; then
+
+  debug "process-home() END"
+
+} # end process-home()
+
 
 # ==============================================
 # Main
@@ -180,12 +244,20 @@ if [[ $REPOPATH == ssh://* ]]; then
 
     if [[ $REPOPATH == *htpc/* ]]; then
         debug "main: Processing htpc path"
+        SERVER=htpc
+        process-home
     elif [[ $REPOPATH == *bornite/* ]]; then
         debug "main: Processing bornite path"
+        SERVER=bornite
+        process-home
     elif [[ $REPOPATH == *malachite/* ]]; then
         debug "main: Processing malachite path"
+        SERVER=malachite
+        process-home
     elif [[ $REPOPATH == *home/* ]]; then
         debug "main: Processing home path"
+        SERVER=home
+        process-home
     elif [[ $REPOPATH == *github/* ]]; then
         debug "main: Processing github path"
     fi
