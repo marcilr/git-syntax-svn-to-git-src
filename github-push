@@ -1,0 +1,136 @@
+#!/bin/bash
+# github-push
+# Created Tue Feb  2 08:36:22 AKST 2016
+# Copyright (C) 2016 by Raymond E. Marcil <marcilr@gmail.com>
+#
+# Push git repository in specified directory to github.
+#
+
+
+# ==============================================
+# Configuration
+# ==============================================
+
+#
+# Enable/disable debugging.
+#
+DEBUG=true
+
+
+# ==============================================
+# Binaries
+# ==============================================
+
+
+# ==============================================
+# Functions
+# ==============================================
+
+#
+# debug()
+# Output debugging text.
+# INPUT: $1 - Text to output if DEBUG="
+#
+function debug {
+
+  if [ ${DEBUG} = "true" ]; then
+    echo "debug() ${1}"
+  fi
+
+}
+
+
+#
+# message()
+# Display specified message passed as argument.
+#
+# INPUT
+# =====
+# Message to display as argument.
+#
+# RESULTS
+# =======
+# Displays argument to stdio.
+#
+function message {
+
+  echo ${1}
+
+}
+
+
+#
+# usage()
+# Display usage and exit.
+#
+function usage(){
+  message "Usage: ${0} <git repo> <github repo>"
+  message "   -d | --debug    Enable debugging."
+  message "   -h | --help     Create non-hierarchical repository."
+  message "   <git repo>      Local git repostory to push to github."
+  message "   <github repo>   GitHub repository target name."
+}
+
+
+#
+# process-cli-args()
+#
+# Links
+# =====
+# How to process command-line args in bash scripts
+# http://debaan.blogspot.com/2007/06/how-to-process-command-line-args-in.html
+#
+function process-cli-args(){
+
+  debug "process-cli-args() START"
+
+  # Display number of command line arguments
+  debug "process-cli-args() number args=${#commandline_args[@]}"
+
+  # Loop over command line arguments (in correct order).
+  for ARG in "${commandline_args[@]}"; do
+    case ${ARG} in
+      "-d" | "--debug")
+        DEBUG=true
+        debug "DEBUG=true"
+        ;;
+      "-h" | "--help")
+        usage
+        exit 0
+        ;;
+      *)
+        debug "process-cli-args() processing: ${ARG}"
+       #
+       # If SVNPATH is set save GITPATH
+       #
+       # How do I check if a variable exists in bash?
+       # http://unix.stackexchange.com/questions/212183/how-do-i-check-if-a-variable-exists-in-bash
+       #
+       if [ -v SVNPATH ]; then
+            GITPATH=${ARG}
+            debug "process-cli-args() GITPATH=${GITPATH}"
+        else
+            SVNPATH=${ARG}
+            debug "process-cli-args() SVNPATH=${SVNPATH}"
+        fi
+        ;;
+    esac
+  done
+
+  debug "process-cli-args() END"
+
+} # end process-cli-args()
+
+
+
+
+# ==============================================
+# Main
+# ==============================================
+
+# Print usage and abort ig no arguments
+if [ -z "$1" ]; then
+  usage
+  exit 1
+fi
+
