@@ -7,3 +7,12 @@
 #   git-repo-create <local git repo | remote repo>
 #
 
+# ==============================================
+# Configuration
+# ==============================================
+
+#
+# Enable/disable debugging.
+#
+DEBUG=true
+
