@@ -10,12 +10,13 @@ github-push
   github-push <git repo> <github repo>
 
 github-repo-create
-  Create a Github Repo from the Command Line
-  Has github-create() function for creating new GitHub repos
-  via cli.  Must set Github username and Personal Access Token
-  for it to work:
+  Create a Github Repo from the Command Line.  Has github-create() function
+  for creating new GitHub repos via cli.  Must set Github username and
+  Personal Access Token for it to work:
     $ git config --global github.user marcilr
     $ git config --global github.token <token>
+
+  NOTE: This command will gracefully repo if the github repo exists already.
 
 process.txt
   Subversion to git conversion process
