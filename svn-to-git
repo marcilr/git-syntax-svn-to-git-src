@@ -16,7 +16,7 @@
 #
 DEBUG=true
 
-AUTHORS=../authors.txt
+AUTHORS=authors.txt
 
 # ==============================================
 # Binaries
@@ -29,6 +29,16 @@ RM=/bin/rm
 SED=/bin/sed
 SORT=/usr/bin/sort
 SVN=/usr/bin/svn
+
+# Get subversion authors
+SVNTOGITAUTHORS=svn-to-git-authors
+
+#
+# Convert svn repo to git repo in working directory
+# svn-to-git-convert <authors> <subversion repo>
+#
+SVNTOGITCONVERT=svn-to-git-convert
+
 UNIQ=/usr/bin/uniq
 
 
@@ -168,4 +178,19 @@ if [ ! -d "${SVNREPO}" ]; then
 fi
 
 # Get authors.txt with svn-to-git-authors
-cd ${SVNREPO}; ${SVNTOGITAUTHORS} > ${AUTHORS}; cd ..
+debug "main: SVNREPO: ${SVNREPO}"
+
+CMD="cd ${SVNREPO}; ${SVNTOGITAUTHORS} > ../${AUTHORS}; cd .."
+debug "main: Executing: ${CMD}"
+eval "${CMD}"
+
+exit 0
+
+# Convert svnrepo to gitrepo
+if [ ! -d "${GITREPO}" ]; then
+    CMD="${SVNTOGITCONVERT} ${AUTHORS} ${SVNPATH}"
+    debug "main: Executing ${CMD}"
+    eval "${CMD}"
+else
+    message "main: ${GITREPO} exists, *not* recreating."
+fi
