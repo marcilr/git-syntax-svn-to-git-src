@@ -9,6 +9,7 @@ git-create
   Create new empty remote git repository via ssh
   Usage: git-create <remote-url>
   eikek/git-create.bash
+  by Eike Kettner
   Created 4 years ago
   https://gist.github.com/eikek/2203808
 
