@@ -25,7 +25,7 @@ GITREMOTE=git-net
 # ==============================================
 # Binaries
 # ==============================================
-GITHUBPUSH=github-push
+GITPUSH=github-push
 
 # ==============================================
 # Functions
@@ -73,7 +73,7 @@ debug "main: GITREPO = ${GITREPO}"
 debug "main: GITREMOTE = ${GITREMOTE}"
 
 # Call github-push to create new github repo and push local git repo to it.
-CMD="${GITHUBPUSH} ${GITREPO} ${GITREMOTE}"
+CMD="${GITPUSH} ${GITREPO} ${GITREMOTE}"
 message "Executing: ${CMD}"
 eval "${CMD}"
 
