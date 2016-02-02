@@ -106,12 +106,12 @@ function process-cli-args(){
        # How do I check if a variable exists in bash?
        # http://unix.stackexchange.com/questions/212183/how-do-i-check-if-a-variable-exists-in-bash
        #
-       if [ -v SVNPATH ]; then
-            GITPATH=${ARG}
-            debug "process-cli-args() GITPATH=${GITPATH}"
+       if [ -v GITREPO ]; then
+            GITHUBREPO=${ARG}
+            debug "process-cli-args() GITHUBREPO=${GITHUBREPO}"
         else
-            SVNPATH=${ARG}
-            debug "process-cli-args() SVNPATH=${SVNPATH}"
+            GITREPO=${ARG}
+            debug "process-cli-args() GITREPO=${GITREPO}"
         fi
         ;;
     esac
