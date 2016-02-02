@@ -25,7 +25,7 @@ GITREMOTE=git-net
 # ==============================================
 # Binaries
 # ==============================================
-GITPUSH=github-push
+GITPUSH=git-push
 
 # ==============================================
 # Functions
@@ -67,7 +67,7 @@ function message {
 # ==============================================
 # Main
 # ==============================================
-debug "test-github-push START"
+debug "test-git-push-github START"
 
 debug "main: GITREPO = ${GITREPO}"
 debug "main: GITREMOTE = ${GITREMOTE}"
@@ -77,5 +77,5 @@ CMD="${GITPUSH} ${GITREPO} ${GITREMOTE}"
 message "Executing: ${CMD}"
 eval "${CMD}"
 
-debug "test-github-push END"
+debug "test-git-push-github END"
 
