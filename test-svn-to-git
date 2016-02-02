@@ -15,7 +15,7 @@
 #
 DEBUG=true
 
-AUTHORS=../authors.txt
+AUTHORS=authors.txt
 SVNPATH=svn+ssh://home/data/svnroot/gci/gci
 GITPATH=ssh://marcilr@home/data/git/gci
 
