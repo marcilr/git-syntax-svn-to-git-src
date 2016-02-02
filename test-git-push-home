@@ -1,0 +1,81 @@
+#!/bin/bash
+# test-git-push-home
+# Created Tue Feb  2 09:08:24 AKST 2016
+# Copyright (C) 2016 by Raymond E. Marcil <marcilr@gmail.com>
+#
+# Test git-push to push local git repo to home.
+#
+
+
+# ==============================================
+# Configuration
+# ==============================================
+
+#
+# Enable/disable debugging.
+#
+DEBUG=true
+
+# Local git repository to push to github
+GITREPO=net
+
+# GitHub repository to create and push to
+GITREMOTE=git-net
+
+# ==============================================
+# Binaries
+# ==============================================
+GITPUSH=github-push
+
+# ==============================================
+# Functions
+# ==============================================
+
+#
+# debug()
+# Output debugging text.
+# INPUT: $1 - Text to output if DEBUG="
+#
+function debug {
+
+  if [ ${DEBUG} = "true" ]; then
+    echo "debug() ${1}"
+  fi
+
+}
+
+
+#
+# message()
+# Display specified message passed as argument.
+#
+# INPUT
+# =====
+# Message to display as argument.
+#
+# RESULTS
+# =======
+# Displays argument to stdio.
+#
+function message {
+
+  echo "${1}"
+
+}
+
+
+# ==============================================
+# Main
+# ==============================================
+debug "test-github-push START"
+
+debug "main: GITREPO = ${GITREPO}"
+debug "main: GITREMOTE = ${GITREMOTE}"
+
+# Call github-push to create new github repo and push local git repo to it.
+CMD="${GITPUSH} ${GITREPO} ${GITREMOTE}"
+message "Executing: ${CMD}"
+eval "${CMD}"
+
+debug "test-github-push END"
+
