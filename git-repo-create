@@ -16,3 +16,9 @@
 #
 DEBUG=true
 
+#
+# GitHub credentials file with USER, PASS, EMAIL,
+# and TOKEN to access github repo.
+#
+CREDENTIALS=/home/${USERNAME}/.github
+
