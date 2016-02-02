@@ -16,7 +16,7 @@ github-repo-create
 process.txt
   Subversion to git conversion process
 
-svn-to-git
+svn-to-git-convert
   Convert subversion repository to git
 
 svn-to-git-authors
