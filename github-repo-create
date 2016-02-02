@@ -195,7 +195,7 @@ function get-credentials {
     debug "get-credentials() PASS = ***"
     debug "get-credentials() EMAIL = ${EMAIL}"
     debug "get-credentials() TOKEN = ***"
-    
+
     debug "get-credentials() END"
 
 } # end get-credentails()
@@ -222,7 +222,7 @@ function repos-verify {
         REPOCOUNT="${#REPOS[@]}"
         debug "repos-verify: REPOCOUNT=${REPOCOUNT}"
     fi
-    
+
     debug "repos-verify() END"
 
 } # end repos-verify()
@@ -246,8 +246,8 @@ function repos-get-paths {
 
     REPOSSHPATH="ssh://git@github.com/marcilr/${REPO}"
     debug "main: REPOSSHPATH = ${REPOSSHPATH}"
-    
-    debug "repos-gte-paths() END"
+
+    debug "repos-get-paths() END"
 
 } # end repos-get-paths()
 
