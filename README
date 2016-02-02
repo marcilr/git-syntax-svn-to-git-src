@@ -5,6 +5,10 @@ Copyright (C) 2016 by Raymond E. Marcil <marcilr@gmail.com>
 
 Filelist
 ========
+github-push
+  Script to push local git repository to gtihub.
+  github-push <git repo> <github repo>
+
 github-repo-create
   Create a Github Repo from the Command Line
   Has github-create() function for creating new GitHub repos
