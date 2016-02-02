@@ -1,0 +1,8 @@
+#!/bin/bash
+# test-svn-to-git
+# Created Mon Feb  1 15:44:18 AKST 2016
+# Copyright (C) 2016 by Raymond E. Marcil <marcilr@gmail.com>
+#
+# Test svn-git-conversion of subversion repo to git repo.
+#
+
