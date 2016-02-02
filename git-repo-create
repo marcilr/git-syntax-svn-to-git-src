@@ -169,6 +169,31 @@ commandline_args=("$@")
 # Process command line arguments
 process-cli-args
 
+debug "main: REPOPATH = ${REPOPATH}"
+
+if [[ $REPOPATH == ssh://* ]]; then
+    debug "main: Creating remote repo via ssh"
+
+elif [[ $REPOPATH == https://* ]]; then
+    debug "main: Creating remote repo via https"
+
+else
+    debug "main: Creating local repo on filesystem"
+
+fi
+
+
+#if [[ $REPOPATH == ssh://git@github.com/* ]]; then
+#    debug "main: Creating github repo: ${REPOPATH}"
+
+#elif [[ $REPOPATH == ssh://marcilr@htpc/data/gti/* ]]; then
+#    debug "main: Creating htpc repo: ${REPOPATH}"
+
+#elif [[ $REPOPATH == ssh://marcilr@bornite/data/git/* ]]; then
+#    debug "main: Creating bornite repo: ${REPOPATH}"
+
+#fi
+
 
 
 debug "git-repo-create END"
