@@ -15,6 +15,7 @@
 #
 DEBUG=true
 
+AUTHORS=../authors.txt
 SVNPATH=svn+ssh://home/data/svnroot/gci/gci
 GITPATH=ssh://marcilr@home/data/git/gci
 
@@ -25,7 +26,7 @@ GITPATH=ssh://marcilr@home/data/git/gci
 SED=/bin/sed
 SVN=/usr/bin/svn
 SVNTOGIT=./svn-to-git
-
+SVNTOGITAUTHORS=svn-to-git-authors
 
 # ==============================================
 # Functions
@@ -84,3 +85,7 @@ debug "main: SVN = ${SVN}"
 if [ ! -d "${SVN}" ]; then
     ${SVN} co ${SVNPATH}
 fi
+
+# Get authors.txt with svn-to-git-authors
+cd ${SVN}; ${SVNTOGITAUTHORS} > ${AUTHORS}; cd ..
+
