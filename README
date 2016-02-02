@@ -9,6 +9,10 @@ git-push
   Script to push local git repository to arbitrary remote git repo.
   github-push <git repo> <github repo>
 
+git-repo-create
+  Create local or remote git repository.
+  git-repo-create <local git repo | remote repo>
+
 github-repo-create
   Create a Github Repo from the Command Line.  Has github-create() function
   for creating new GitHub repos via cli.  Must set Github username and
