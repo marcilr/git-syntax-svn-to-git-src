@@ -17,10 +17,10 @@
 DEBUG=true
 
 # Local git repository to push to github
-GITREPO=gci
+GITREPO=net
 
 # GitHub repository to create and push to
-GITHUBREPO=git-gci
+GITHUBREPO=git-net
 
 # ==============================================
 # Binaries
