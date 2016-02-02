@@ -27,3 +27,6 @@ svn-to-git-authors
 test
   Test driver for svn-to-git
 
+test-svn-to-git
+  Test svn-git-conversion of subversion repo to git repo
+
