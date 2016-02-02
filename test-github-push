@@ -67,6 +67,7 @@ function message {
 # ==============================================
 # Main
 # ==============================================
+debug "test-github-push START"
 
 debug "main: GITREPO = ${GITREPO}"
 debug "main: GITHUBREPO = ${GITHUBREPO}"
@@ -75,3 +76,6 @@ debug "main: GITHUBREPO = ${GITHUBREPO}"
 CMD="${GITHUBPUSH} ${GITREPO} ${GITHUBREPO}"
 message "Executing: ${CMD}"
 eval "${CMD}"
+
+debug "test-github-push END"
+
