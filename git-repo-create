@@ -26,6 +26,10 @@ CREDENTIALS=/home/${USERNAME}/.github
 # ==============================================
 # Binaries
 # ==============================================
+CHMOD=/bin/chmod
+CHOWN=/bin/chown
+GIT=/usr/bin/git
+MKDIR=/bin/mkdir
 
 
 # ==============================================
@@ -178,8 +182,19 @@ elif [[ $REPOPATH == https://* ]]; then
     debug "main: Creating remote repo via https"
 
 else
-    debug "main: Creating local repo on filesystem"
-
+    if [ -d ${REPOPATH} ]; then
+        message "${REPOPATH} exists already, aborting."
+        exit 1
+    else
+        debug "main: Creating ${REPOPATH} directory"
+        ${MKDIR} -p "${REPOPATH}"
+        ${CHMOD} 775 "${REPOPATH}"
+        ${CHMOD} g+ws "${REPOPATH}"
+        cd "${REPOPATH}"
+        debug "main: Initializing ${REPOPATH} repo"
+        ${GIT} init
+        cd ..
+   fi
 fi
 
 
@@ -197,4 +212,3 @@ fi
 
 
 debug "git-repo-create END"
-
