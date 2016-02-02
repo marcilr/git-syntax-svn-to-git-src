@@ -22,6 +22,8 @@ GITPATH=ssh://marcilr@home/data/git/gci
 # ==============================================
 # Binaries
 # ==============================================
+SED=/bin/sed
+SVN=/usr/bin/svn
 SVNTOGIT=./svn-to-git
 
 
@@ -73,3 +75,12 @@ debug "Executing: ${CMD}"
 
 # Execute conversion command
 eval "${CMD}"
+
+
+SVN=`echo ${SVNPATH} | ${SED} 's:.*/::g'`
+debug "main: SVN = ${SVN}"
+
+# Checkout subversion repo:
+if [ ! -d "${SVN}" ]; then
+    ${SVN} co ${SVNPATH}
+fi
