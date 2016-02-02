@@ -5,6 +5,13 @@ Copyright (C) 2016 by Raymond E. Marcil <marcilr@gmail.com>
 
 Filelist
 ========
+git-create
+  Create new empty remote git repository via ssh
+  Usage: git-create <remote-url>
+  eikek/git-create.bash
+  Created 4 years ago
+  https://gist.github.com/eikek/2203808
+
 git-push
   Script to push local git repository to arbitrary remote git repo.
   github-push <git repo> <github repo>
