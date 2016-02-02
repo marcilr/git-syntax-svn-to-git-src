@@ -74,7 +74,7 @@ function debug {
 #
 function message {
 
-  echo ${1}
+  echo "${1}"
 
 }
 
@@ -183,8 +183,6 @@ debug "main: SVNREPO: ${SVNREPO}"
 CMD="cd ${SVNREPO}; ${SVNTOGITAUTHORS} > ../${AUTHORS}; cd .."
 debug "main: Executing: ${CMD}"
 eval "${CMD}"
-
-exit 0
 
 # Convert svnrepo to gitrepo
 if [ ! -d "${GITREPO}" ]; then
