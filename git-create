@@ -7,6 +7,8 @@
 #
 # Usage: git-create <remote-url>
 #
+# NOTE: This command does not handle ssh:// syntax.
+#
 # Links
 # =====
 # eikek/git-create.bash
