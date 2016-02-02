@@ -3,7 +3,8 @@
 # Created Tue Feb  2 08:36:22 AKST 2016
 # Copyright (C) 2016 by Raymond E. Marcil <marcilr@gmail.com>
 #
-# Push git repository in specified directory to github.
+# Push specified local git repository to newly created github
+# repository.
 #
 
 
@@ -20,7 +21,7 @@ DEBUG=true
 # ==============================================
 # Binaries
 # ==============================================
-
+GITHUBREPOCREATE=github-repo-create
 
 # ==============================================
 # Functions
@@ -117,6 +118,9 @@ function process-cli-args(){
     esac
   done
 
+  debug "process-cli-args() GITREPO = ${GITREPO}"
+  debug "process-cli-args() GITHUBREPO = ${GITHUBREPO}"
+
   debug "process-cli-args() END"
 
 } # end process-cli-args()
@@ -127,6 +131,11 @@ function process-cli-args(){
 # ==============================================
 # Main
 # ==============================================
+debug "github-push START"
+
+# Check argument count
+ARGCOUNT=$#
+debug "main: ARGCOUNT=$#"
 
 # Print usage and abort ig no arguments
 if [ -z "$1" ]; then
@@ -134,3 +143,18 @@ if [ -z "$1" ]; then
   exit 1
 fi
 
+# Get copy of command line arguments
+commandline_args=("$@")
+
+# Process command line arguments
+process-cli-args
+
+debug "main: GITREPO = ${GITREPO}"
+debug "main: GITHUBREPO = ${GITHUBREPO}"
+
+# Create new github repo.
+CMD="github-repo-create ${GITHUBREPO}"
+debug "main: Executing ${CMD}"
+eval "${CMD}"
+
+debug "github-push END"
