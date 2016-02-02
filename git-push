@@ -1,0 +1,195 @@
+#!/bin/bash
+# github-push
+# Created Tue Feb  2 08:36:22 AKST 2016
+# Copyright (C) 2016 by Raymond E. Marcil <marcilr@gmail.com>
+#
+# Push specified local git repository to newly created github
+# repository.
+#
+
+
+# ==============================================
+# Configuration
+# ==============================================
+
+#
+# Enable/disable debugging.
+#
+DEBUG=true
+
+#
+# GitHub credentials file with USER, PASS, EMAIL,
+# and TOKEN to access github repo.
+#
+CREDENTIALS=/home/${USERNAME}/.github
+
+
+# ==============================================
+# Binaries
+# ==============================================
+GITHUBREPOCREATE=github-repo-create
+
+# ==============================================
+# Functions
+# ==============================================
+
+#
+# debug()
+# Output debugging text.
+# INPUT: $1 - Text to output if DEBUG="
+#
+function debug {
+
+  if [ ${DEBUG} = "true" ]; then
+    echo "debug() ${1}"
+  fi
+
+}
+
+
+#
+# message()
+# Display specified message passed as argument.
+#
+# INPUT
+# =====
+# Message to display as argument.
+#
+# RESULTS
+# =======
+# Displays argument to stdio.
+#
+function message {
+
+  echo "${1}"
+
+}
+
+
+#
+# usage()
+# Display usage and exit.
+#
+function usage(){
+  message "Usage: ${0} <git repo> <git target repo>"
+  message "   -d | --debug        Enable debugging."
+  message "   -h | --help         Create non-hierarchical repository."
+  message "   <git repo>          Local git repostory to push to github."
+  message "   <git target repo>   Git target  repository target name.  Like:"
+  message "                       ssh://git@github.com/marcilr/git-net"
+  message "                       ssh://marcilr@htpc/data/git/gci"
+}
+
+
+#
+# process-cli-args()
+#
+# Links
+# =====
+# How to process command-line args in bash scripts
+# http://debaan.blogspot.com/2007/06/how-to-process-command-line-args-in.html
+#
+function process-cli-args(){
+
+  debug "process-cli-args() START"
+
+  # Display number of command line arguments
+  debug "process-cli-args() number args=${#commandline_args[@]}"
+
+  # Loop over command line arguments (in correct order).
+  for ARG in "${commandline_args[@]}"; do
+    case ${ARG} in
+      "-d" | "--debug")
+        DEBUG=true
+        debug "DEBUG=true"
+        ;;
+      "-h" | "--help")
+        usage
+        exit 0
+        ;;
+      *)
+        debug "process-cli-args() processing: ${ARG}"
+       #
+       # If SVNPATH is set save GITPATH
+       #
+       # How do I check if a variable exists in bash?
+       # http://unix.stackexchange.com/questions/212183/how-do-i-check-if-a-variable-exists-in-bash
+       #
+       if [ -v GITREPO ]; then
+            GITREMOTE=${ARG}
+            debug "process-cli-args() GITREMOTE=${GITREMOTE}"
+        else
+            GITREPO=${ARG}
+            debug "process-cli-args() GITREPO=${GITREPO}"
+        fi
+        ;;
+    esac
+  done
+
+  debug "process-cli-args() GITREPO = ${GITREPO}"
+  debug "process-cli-args() GITREMOTE = ${GITREMOTE}"
+
+  debug "process-cli-args() END"
+
+} # end process-cli-args()
+
+
+
+
+# ==============================================
+# Main
+# ==============================================
+debug "github-push START"
+
+# Check argument count
+ARGCOUNT=$#
+debug "main: ARGCOUNT=$#"
+
+# Print usage and abort if no arguments
+if [ -z "$1" ]; then
+  usage
+  exit 1
+fi
+
+# Check for ~/.github credentials file and source
+if [ ! -f ${CREDENTIALS} ]; then
+  message "${CREDENTIALS} not found, aborting."
+  exit 1
+else
+  . ${CREDENTIALS}
+  debug "main: github USER = ${USER}"
+  debug "main: github PASS = ***"
+  debug "main: github EMAIL = ${EMAIL}"
+  debug "main: github TOKEN = ***"
+fi
+
+# Get copy of command line arguments
+commandline_args=("$@")
+
+# Process command line arguments
+process-cli-args
+
+debug "main: GITREPO = ${GITREPO}"
+debug "main: GITREMOTE = ${GITREMOTE}"
+
+# Create new github repo.
+CMD="github-repo-create ${GITREMOTE}"
+debug "main: Executing ${CMD}"
+eval "${CMD}"
+
+
+
+# Updated local git repo with remote to push to.
+CMD="${GIT} remote add origin ${GITREMOTE}"
+debug "main: Executing ${CMD}"
+
+# Push repo to GitHub
+CMD="${GIT} push origin --all"
+debug "main: Executing ${CMD}"
+
+CMD="${GIT} push origin --tags"
+debug "main: Executing ${CMD}"
+
+
+
+debug "github-push END"
