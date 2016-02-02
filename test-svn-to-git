@@ -60,7 +60,7 @@ function debug {
 #
 function message {
 
-  echo ${1}
+  echo "${1}"
 
 }
 
