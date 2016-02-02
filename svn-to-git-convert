@@ -157,6 +157,7 @@ debug "main: ARGCOUNT=$#"
 # Abort with usage if there are not 2 arguments
 if [ ${ARGCOUNT} != 2 ]; then
   usage
+  exit 1
 fi
 
 # Get copy of command line arguments
