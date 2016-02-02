@@ -111,17 +111,17 @@ function process-cli-args(){
       *)
         debug "process-cli-args() processing: ${ARG}"
        #
-       # If AUTHORS is set save SVNREPO
+       # If SVNPATH is set save GITPATH
        #
        # How do I check if a variable exists in bash?
        # http://unix.stackexchange.com/questions/212183/how-do-i-check-if-a-variable-exists-in-bash
        #
-       if [ -v AUTHORS ]; then
-            SVNREPO=${ARG}
-            debug "process-cli-args() SVNREPO=${SVNREPO}"
+       if [ -v SVNPATH ]; then
+            GITPATH=${ARG}
+            debug "process-cli-args() GITPATH=${GITPATH}"
         else
-            AUTHORS=${ARG}
-            debug "process-cli-args() AUTHORS=${AUTHORS}"
+            SVNPATH=${ARG}
+            debug "process-cli-args() SVNPATH=${SVNPATH}"
         fi
         ;;
     esac
@@ -151,3 +151,5 @@ commandline_args=("$@")
 # Process command line arguments
 process-cli-args
 
+debug "main: SVNPATH = ${SVNPATH}"
+debug "main: GITPATH = ${GITPATH}"
