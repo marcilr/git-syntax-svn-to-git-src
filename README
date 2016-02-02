@@ -5,8 +5,8 @@ Copyright (C) 2016 by Raymond E. Marcil <marcilr@gmail.com>
 
 Filelist
 ========
-github-push
-  Script to push local git repository to gtihub.
+git-push
+  Script to push local git repository to arbitrary remote git repo.
   github-push <git repo> <github repo>
 
 github-repo-create
