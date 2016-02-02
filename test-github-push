@@ -25,8 +25,7 @@ GITHUBREPO=git-gci
 # ==============================================
 # Binaries
 # ==============================================
-GITHUBREPOCREATE=github-repo-create
-
+GITHUBPUSH=github-push
 
 # ==============================================
 # Functions
@@ -72,3 +71,7 @@ function message {
 debug "main: GITREPO = ${GITREPO}"
 debug "main: GITHUBREPO = ${GITHUBREPO}"
 
+# Call github-push to create new github repo and push local git repo to it.
+CMD="${GITHUBPUSH} ${GITREPO} ${GITHUBREPO}"
+message "Executing: ${CMD}"
+eval "${CMD}"
