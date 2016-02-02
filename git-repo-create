@@ -115,19 +115,6 @@ function process-cli-args(){
         debug "process-cli-args() processing: ${ARG}"
         REPOPATH=${ARG}
         debug "process-cli-args() REPOPATH=${REPOPATH}"
-        #
-        # If SVNPATH is set save GITPATH
-        #
-        # How do I check if a variable exists in bash?
-        # http://unix.stackexchange.com/questions/212183/how-do-i-check-if-a-variable-exists-in-bash
-        #
-        #if [ -v GITREPO ]; then
-        #     GITREMOTE=${ARG}
-        #     debug "process-cli-args() GITREMOTE=${GITREMOTE}"
-        # else
-        #     GITREPO=${ARG}
-        #     debug "process-cli-args() GITREPO=${GITREPO}"
-        # fi
         ;;
     esac
   done
