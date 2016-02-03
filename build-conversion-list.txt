@@ -1,0 +1,24 @@
+build-conversion-list.txt
+Created Wed Feb  3 11:10:02 AKST 2016
+Copyright (C) 2016 by Raymond E. Marcil <marcilr@gmail.com>
+
+
+Build conversion list of repos to convert
+
+
+Get list of subdirectories:
+$ find . -type d | grep -v ".svn"
+.
+./plan
+./support
+./aoc
+...
+
+This might be better as it would handle svn repo subdirectories:
+$ find . -name svn_ext_val.txt
+./tickets/svn_ext_val.txt
+./tickets/00COMPLETE/svn_ext_val.txt
+./svn_ext_val.txt
+...
+
+
