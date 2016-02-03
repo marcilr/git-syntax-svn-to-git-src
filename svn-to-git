@@ -182,15 +182,15 @@ debug "main: GITREPO = ${GITREPO}"
 
 # Determine target SERVER from GITPATH
 if [[ $GITPATH == *htpc/* ]]; then
-    SERVER=htpc
+    TARGETSERVER=htpc
 elif [[ $GITPATH == *bornite/* ]]; then
-    SERVER=bornite
+    TARGETSERVER=bornite
 elif [[ $GITPATH == *malachite/* ]]; then
-    SERVER=malachite
+    TARGETSERVER=malachite
 elif [[ $GITPATH == *home/* ]]; then
-    SERVER=home
+    TARGETSERVER=home
 fi
-debug "main: SERVER = ${SERVER}"
+debug "main: TARGETSERVER = ${TARGETSERVER}"
 
 # Determine target PATH from GITPATH
 TARGETPATH=`echo ${GITPATH} | ${SED} "s:.*${SERVER}::g"`
