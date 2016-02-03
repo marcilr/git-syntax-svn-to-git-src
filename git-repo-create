@@ -164,7 +164,7 @@ function process-home(){
       eval "${CMD}"
 
       # Initialize git repo
-      CMD="${SSH} ${SERVER} 'cd ${PATH}; /usr/bin/git init'"
+      CMD="${SSH} ${SERVER} '/usr/bin/git init ${PATH}'"
       debug "process-home() Executing: ${CMD}"
       eval "${CMD}"
 
