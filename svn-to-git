@@ -6,6 +6,10 @@
 # Wrapper script to convert subversion repo to git.
 # Converted script is then pushed to the specified target.
 #
+# o ${USERNAME} is used for ownership of remote
+# o Group set on remote is set to "sshfs"
+# o Privs set on remote is set to 2775 (drwxrwsr-x)
+#
 
 # ==============================================
 # Configuration
@@ -16,7 +20,18 @@
 #
 DEBUG=true
 
+#
+# Authors file to generate from subversion repo and
+# use with git svn clone.
+#
 AUTHORS=authors.txt
+
+
+# Group of remote repo
+GROUP=sshfs
+
+# Privileges of remote repo
+PRIVS=2775
 
 # ==============================================
 # Binaries
@@ -30,12 +45,15 @@ GIT=/usr/bin/git
 #
 GITREPOCREATE=git-repo-create
 
+CHMOD=/bin/chmod
+CHOWN=/bin/chown
 GREP=/bin/grep
 PERL=/usr/bin/perl
 RM=/bin/rm
 RSYNC=/usr/bin/rsync
 SED=/bin/sed
 SORT=/usr/bin/sort
+SSH=/usr/bin/ssh
 SVN=/usr/bin/svn
 
 # Get subversion authors
@@ -181,6 +199,7 @@ GITREPO=`echo ${GITPATH} | ${SED} 's:.*/::g'`
 debug "main: GITREPO = ${GITREPO}"
 
 # Determine target SERVER from GITPATH
+debug "main: GITPATH = ${GITPATH}"
 if [[ $GITPATH == *htpc/* ]]; then
     TARGETSERVER=htpc
 elif [[ $GITPATH == *bornite/* ]]; then
@@ -193,7 +212,9 @@ fi
 debug "main: TARGETSERVER = ${TARGETSERVER}"
 
 # Determine target PATH from GITPATH
-TARGETPATH=`echo ${GITPATH} | ${SED} "s:.*${SERVER}::g"`
+debug "main: GITPATH = ${GITPATH}"
+TARGETPATH=`echo ${GITPATH} | ${SED} "s:.*${TARGETSERVER}::g"`
+debug "main: TARGETPATH = ${TARGETPATH}"
 
 # Remove git repo name from end of string to get target git path
 TARGETPATH=`echo ${TARGETPATH} | ${SED} "s:/${GITREPO}::g"`
@@ -220,9 +241,35 @@ else
     message "main: Local ${GITREPO} exists, *not* recreating."
 fi
 
+# Check if git repo already exists on TARGETSERVER
+CMD="${SSH} ${TARGETSERVER} 'if [ -d ${TARGETPATH}/${GITREPO} ]; then echo "exists"; fi'"
+debug "main: Executing ${CMD}"
+RESULT=`eval "${CMD}"`
+
+# Abort if target exisits already
+if [ "${RESULT}" == "exists" ]; then
+    message "main: ${TARGETPATH}/${GITREPO} exists already, aborting."
+    exit 1
+fi
+
+# Create rsync target
+TARGET="${TARGETSERVER}:${TARGETPATH}"
+debug "main: TARGET = ${TARGET}"
 
 # Rsync git repository to target
-
 # $ rsync -va --stats --progress ./gci htpc:/data/git/
 
-#${RSYNC} -va --stats --progress ${GITREPO}
+CMD="${RSYNC} -va --stats --progress ${GITREPO} ${TARGET}"
+debug "main: Executing ${CMD}"
+eval "${CMD}"
+
+# Set privileges on remote
+CMD="${SSH} ${TARGETSERVER} '${CHMOD} ${PRIVS} ${TARGETPATH}/${GITREPO}'"
+debug "main: Executing ${CMD}"
+eval "${CMD}"
+
+# Set ownership on remote
+CMD="${SSH} ${TARGETSERVER} '${CHOWN} -R ${USERNAME}:${GROUP} ${TARGETPATH}/${GITREPO}'"
+debug "main: Executing ${CMD}"
+eval "${CMD}"
+
