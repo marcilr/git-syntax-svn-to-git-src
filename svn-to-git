@@ -23,6 +23,13 @@ AUTHORS=authors.txt
 # ==============================================
 AWK=/usr/bin/awk
 GIT=/usr/bin/git
+
+#
+# Create on github or home
+# Scans git url to determine target.
+#
+GITREPOCREATE=git-repo-create
+
 GREP=/bin/grep
 PERL=/usr/bin/perl
 RM=/bin/rm
@@ -190,5 +197,24 @@ if [ ! -d "${GITREPO}" ]; then
     debug "main: Executing ${CMD}"
     eval "${CMD}"
 else
-    message "main: ${GITREPO} exists, *not* recreating."
+    message "main: Local ${GITREPO} exists, *not* recreating."
 fi
+
+# Create new remote git repo (either github or home)
+CMD="${GITREPOCREATE} ${GITPATH}"
+debug "main: Executing ${CMD}"
+eval "${CMD}"
+
+# Set remote for locally created git repo
+CMD="cd ${GITREPO}; ${GIT} remote add origin ${GITPATH}; cd .."
+debug "main: Executing ${CMD}"
+eval "${CMD}"
+
+# Push local git repo to new remote
+cd ${GITREPO}
+${GIT} push origin --all
+${GIT} push origin --tags
+cd ..
+
+
+
