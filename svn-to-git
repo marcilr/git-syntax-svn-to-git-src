@@ -10,6 +10,9 @@
 # o Group set on remote is set to "sshfs"
 # o Privs set on remote is set to 2775 (drwxrwsr-x)
 #
+# NOTE: This script is designed to rsync converted git repo to
+#       home, htpc, bornite, or malachite.  Not updated for github
+#       yet. (Wed Feb 3, 2016)
 
 # ==============================================
 # Configuration
