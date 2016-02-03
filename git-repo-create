@@ -6,6 +6,20 @@
 # Create local or remote git repository.
 #   git-repo-create <local git repo | remote repo>
 #
+# Links
+# =====
+# A curl tutorial using GitHub's API
+# Great documentation and syntax here
+# Create repo:
+#   curl -H "Authorization: token PUT-YOUR-AUTH-TOKEN-HERE" \
+#   https://api.github.com/user/repos \
+#   -d '{"name": "PUT-YOUR-REPO-NAME-HERE"}'
+# https://gist.github.com/caspyin/2288960
+#
+# GitHub API docmentation
+# Great documentation here
+# https://developer.github.com/v3/
+#
 
 # ==============================================
 # Configuration
