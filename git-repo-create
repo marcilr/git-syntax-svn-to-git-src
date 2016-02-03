@@ -42,6 +42,7 @@ CREDENTIALS=/home/${USERNAME}/.github
 # ==============================================
 CHMOD=/bin/chmod
 CHOWN=/bin/chown
+CURL=/usr/bin/curl
 GIT=/usr/bin/git
 MKDIR=/bin/mkdir
 SED=/bin/sed
@@ -237,6 +238,130 @@ function process-home(){
 } # end process-home()
 
 
+#
+# repos-get-paths()
+# Get github https and ssh repo paths
+#
+# INPUT  - REPO to use in paths
+#          USER from ~/.github
+# OUTPUT - REPOHTTPSPATH https github repo path
+#          REPOSSHPAT ssh gtihub repo path
+# USES -   debug()
+#
+function repos-get-paths {
+
+    debug "repos-get-paths() START"
+
+    REPOHTTPSPATH="https://api.github.com/repos/${USER}/${REPO}"
+    debug "main: REPOHTTPSPATH = ${REPOHTTPSPATH}"
+
+    REPOSSHPATH="ssh://git@github.com/${USER}/${REPO}"
+    debug "main: REPOSSHPATH = ${REPOSSHPATH}"
+
+    debug "repos-get-paths() END"
+
+} # end repos-get-paths()
+
+
+#
+# process-github()
+# Process creation of github repo.
+#
+# A curl tutorial using GitHub's API
+# Great documentation and syntax here
+# Create repo:
+#   curl -H "Authorization: token PUT-YOUR-AUTH-TOKEN-HERE" \
+#   https://api.github.com/user/repos \
+#   -d '{"name": "PUT-YOUR-REPO-NAME-HERE"}'
+# https://gist.github.com/caspyin/2288960
+#
+function process-github(){
+
+    debug "process-github() START"
+    debug "process-github() REPOPATH = ${REPOPATH}"
+
+    # Extract github repo name from REPOPATH
+    REPO=`echo ${REPOPATH} | ${SED} 's:.*/::g'`
+    debug "process-github() REPO = ${REPO}"
+
+    # Get REPOHTTPSPATH and REPOSSHPATH
+    repos-get-paths
+    debug "process-github() REPOHTTPSPATH = ${REPOHTTPSPATH}"
+    debug "process-github() REPOSSHPATH = ${REPOSSHPATH}"
+
+    #
+    # Check that github repository does not exist using:
+    #   curl https://api.github.com/repos/<user>/<repo>
+    #
+    # If repo *does not* exist RESULT will contain:
+    # {
+    #   "message": "Not Found",
+    #   "documentation_url": "https://developer.github.com/v3"
+    # }
+    #
+    # The use of curl seems more straightforward that he use of:
+    #   git ls-remote ssh://git@github.com/<user>/<repo>
+    #
+    # If repo *does not* exist RESULT will contain:
+    #   "ERROR: Repository not found."
+    #
+    # Check that git repository exists
+    # http://stackoverflow.com/questions/23914896/check-that-git-repository-exists
+    #
+
+    RESULT=`curl ${REPOHTTPSPATH} 2>/dev/null`
+    #debug "process-github RESULT = ${RESULT}"
+
+    #
+    # NOTE: Send error to /dev/null to suppress output like:
+    #   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+    #                                Dload  Upload   Total   Spent    Left  Speed
+    # 100    87  100    87    0     0    170      0 --:--:-- --:--:-- --:--:--   170
+    #
+    if [[ ${RESULT} == *"Not Found"* ]]; then
+        echo "${REPO} repo not found, creating..."
+
+        #
+        # Create github repo via command line
+        #
+        # Links
+        # =====
+        # Create a Github Repo from the Command Line
+        #   curl -u "$username:$token" https://api.github.com/user/repos \
+        #   -d '{"name":"'$repo_name'"}'
+        # https://viget.com/extend/create-a-github-repo-from-the-command-line
+        #
+        # $ curl -H "Authorization: token ${TOKEN}" \
+        # https://api.github.com/user/repos -d '{"name": "REPO"}'
+        #
+        CMD="${CURL} -H \"Authorization: token ${TOKEN}\" "
+        CMD+="https://api.github.com/user/repos -d '{\"name\": \"${REPO}\"}'"
+        debug "process-github: Executing ${CMD}"
+
+        # Evaluate command to create repository
+        eval "${CMD}"
+
+    else
+        echo "${REPO} already exists, aborting."
+        exit 1
+    fi
+
+    #
+    # Check that git repo was created.
+    #
+    RESULT=`${CURL} ${REPOHTTPSPATH} 2>/dev/null`
+    if [[ ${RESULT} == *"Not Found"* ]]; then
+        message "${REPO} repo not found, creation failed."
+        exit 1
+    else
+        message "${REPO} created."
+    fi
+
+    debug "process-github() END"
+
+} # end process-github()
+
+
 # ==============================================
 # Main
 # ==============================================
@@ -263,7 +388,16 @@ process-cli-args
 
 debug "main: REPOPATH = ${REPOPATH}"
 
-if [[ $REPOPATH == ssh://* ]]; then
+#
+# Check for github repo.
+# URL type does not matter.  Either ssh:// or https:// will work.
+#
+debug "main: REPOPATH = ${REPOPATH}"
+if [[ $REPOPATH == *github* ]]; then
+    debug "main: Processing github path"
+    process-github
+
+elif [[ $REPOPATH == ssh://* ]]; then
     debug "main: Creating remote repo via ssh"
 
     if [[ $REPOPATH == *htpc/* ]]; then
@@ -282,14 +416,10 @@ if [[ $REPOPATH == ssh://* ]]; then
         debug "main: Processing home path"
         SERVER=home
         process-home
-    elif [[ $REPOPATH == *github/* ]]; then
-        debug "main: Processing github path"
     fi
 
-elif [[ $REPOPATH == https://* ]]; then
-    debug "main: Creating remote repo via https"
-
 else
+    # Check if local repo exists already
     if [ -d ${REPOPATH} ]; then
         message "${REPOPATH} exists already, aborting."
         exit 1
@@ -303,21 +433,10 @@ else
         debug "main: Initializing ${REPOPATH} repo"
         ${GIT} init
         cd ..
-   fi
-fi
-
-
-#if [[ $REPOPATH == ssh://git@github.com/* ]]; then
-#    debug "main: Creating github repo: ${REPOPATH}"
-
-#elif [[ $REPOPATH == ssh://marcilr@htpc/data/gti/* ]]; then
-#    debug "main: Creating htpc repo: ${REPOPATH}"
-
-#elif [[ $REPOPATH == ssh://marcilr@bornite/data/git/* ]]; then
-#    debug "main: Creating bornite repo: ${REPOPATH}"
-
-#fi
-
+   fi   # end if [ -d ${REPOPATH} ]; then
+fi   # end if [[ $REPOPATH == *github* ]]; then
 
 
 debug "git-repo-create END"
+
+exit 0
