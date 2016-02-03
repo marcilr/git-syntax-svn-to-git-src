@@ -46,4 +46,3 @@ test
 
 test-svn-to-git
   Test svn-git-conversion of subversion repo to git repo
-
