@@ -21,4 +21,4 @@ $ find . -name svn_ext_val.txt
 ./svn_ext_val.txt
 ...
 
-
+NOTE: The above does not catch standalone repos with a svn_ext_val.txt
