@@ -1,0 +1,96 @@
+test-svn-to-git-home.txt
+Created Wed Feb  3 08:10:45 AKST 2016
+Copyright (C) 2016 by Raymond E. Marcil <marcilr@gmail.com>
+
+
+Test svn-git-conversion of subversion repo to git repo.
+
+
+Tue Feb  2 14:21:20 AKST 2016
+=============================
+Executing of svn-to-git fails when configured for home with:
+  AUTHORS=authors.txt
+  SVNPATH=svn+ssh://home/data/svnroot/gci/gci
+  GITPATH=ssh://marcilr@home/data/git/gci
+
+covellite:~/git/syntax/svn-to-git/src$ ./test-svn-to-git-home
+debug() Executing: ./svn-to-git svn+ssh://home/data/svnroot/gci/gci ssh://marcilr@home/data/git/gci
+debug() main: ARGCOUNT=2
+debug() process-cli-args() START
+debug() process-cli-args() number args=2
+debug() process-cli-args() processing: svn+ssh://home/data/svnroot/gci/gci
+debug() process-cli-args() SVNPATH=svn+ssh://home/data/svnroot/gci/gci
+debug() process-cli-args() processing: ssh://marcilr@home/data/git/gci
+debug() process-cli-args() GITPATH=ssh://marcilr@home/data/git/gci
+debug() process-cli-args() END
+debug() main: SVNPATH = svn+ssh://home/data/svnroot/gci/gci
+debug() main: GITPATH = ssh://marcilr@home/data/git/gci
+debug() main: SVNREPO = gci-svn
+debug() main: GITREPO = gci
+debug() main: SVNREPO: gci-svn
+debug() main: Executing: cd gci-svn; svn-to-git-authors > ../authors.txt; cd ..
+main: Local gci exists, *not* recreating.
+debug() main: Executing git-repo-create ssh://marcilr@home/data/git/gci
+debug() git-repo-create START
+debug() main: ARGCOUNT=1
+debug() get-credentials() START
+debug() main: CREDENTIALS: /home/marcilr/.github
+debug() get-credentials() USER = marcilr
+debug() get-credentials() PASS = ***
+debug() get-credentials() EMAIL = marcilr@gmail.com
+debug() get-credentials() TOKEN = ***
+debug() get-credentials() END
+debug() process-cli-args() START
+debug() process-cli-args() number args=1
+debug() process-cli-args() processing: ssh://marcilr@home/data/git/gci
+debug() process-cli-args() REPOPATH=ssh://marcilr@home/data/git/gci
+debug() process-cli-args() GITREPO = 
+debug() process-cli-args() GITREMOTE = 
+debug() process-cli-args() END
+debug() main: REPOPATH = ssh://marcilr@home/data/git/gci
+debug() main: REPOPATH = ssh://marcilr@home/data/git/gci
+debug() main: Creating remote repo via ssh
+debug() main: Processing home path
+debug() process-home() START
+debug() process-home() SERVER = home
+debug() process-home() PATH = /data/git/gci
+debug() process-home() Executing: /usr/bin/ssh home 'if [ -d /data/git/gci ]; then echo exists; fi'
+debug() process-home() RESULT =
+Creating /data/git/gci directory on home...
+debug() process-home() Executing: /usr/bin/ssh home '/bin/mkdir -p /data/git/gci'
+debug() process-home() Executing: /usr/bin/ssh home '/usr/bin/git init /data/git/gci'
+Initialized empty Git repository in /data/git/gci/.git/
+debug() process-home() Executing: /usr/bin/ssh home '/bin/chmod -R 2775 /data/git/gci'
+debug() process-home() Executing: /usr/bin/ssh home 'if [ -d /data/git/gci/.git ]; then echo exists; fi'
+process-home() Created ssh://marcilr@home/data/git/gci remote
+debug() process-home() END
+debug() git-repo-create END
+debug() main: Executing cd gci; /usr/bin/git remote add origin ssh://marcilr@home/data/git/gci; cd ..
+fatal: remote origin already exists.
+Counting objects: 298, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (297/297), done.
+Writing objects: 100% (298/298), 38.10 KiB | 0 bytes/s, done.
+Total 298 (delta 178), reused 0 (delta 0)
+remote: error: refusing to update checked out branch: refs/heads/master
+remote: error: By default, updating the current branch in a non-bare repository
+remote: error: is denied, because it will make the index and work tree inconsistent
+remote: error: with what you pushed, and will require 'git reset --hard' to match
+remote: error: the work tree to HEAD.
+remote: error: 
+remote: error: You can set 'receive.denyCurrentBranch' configuration variable to
+remote: error: 'ignore' or 'warn' in the remote repository to allow pushing into
+remote: error: its current branch; however, this is not recommended unless you
+remote: error: arranged to update its work tree to match what you pushed in some
+remote: error: other way.
+remote: error: 
+remote: error: To squelch this message and still keep the default behaviour, set
+remote: error: 'receive.denyCurrentBranch' configuration variable to 'refuse'.
+To ssh://marcilr@home/data/git/gci
+ ! [remote rejected] master -> master (branch is currently checked out)
+error: failed to push some refs to 'ssh://marcilr@home/data/git/gci'
+No refs in common and none specified; doing nothing.
+Perhaps you should specify a branch such as 'master'.
+fatal: The remote end hung up unexpectedly
+error: failed to push some refs to 'ssh://marcilr@home/data/git/gci'
+covellite:~/git/syntax/svn-to-git/src$ ./test-svn-to-git-home
