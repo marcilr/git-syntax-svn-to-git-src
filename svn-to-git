@@ -194,8 +194,10 @@ debug "main: SERVER = ${SERVER}"
 
 # Determine target PATH from GITPATH
 TARGETPATH=`echo ${GITPATH} | ${SED} "s:.*${SERVER}::g"`
-debug "main: TARGETPATH = ${TARGETPATH}"
 
+# Remove git repo name from end of string to get target git path
+TARGETPATH=`echo ${TARGETPATH} | ${SED} "s:/${GITREPO}::g"`
+debug "main: TARGETPATH = ${TARGETPATH}"
 
 # Checkout subversion repo:
 if [ ! -d "${SVNREPO}" ]; then
