@@ -6,6 +6,83 @@ Copyright (C) 2016 by Raymond E. Marcil <marcilr@gmail.com>
 Test svn-git-conversion of subversion repo to git repo.
 
 
+Wed Feb  3 08:10:45 AKST 2016
+=============================
+o Remote gci repo, recreate, and try again:
+
+1. Delete old and create fresh gci repo:
+htpc:/data/git$ rm -rf gci/
+htpc:/data/git$ mkdir gci
+htpc:/data/git$ cd gci/
+
+htpc:/data/git/gci$ git init
+Initialized empty Git repository in /data/git/gci/.git/
+marcilr@htpc:/data/git/gci$ 
+htpc:/data/git/gci$
+
+htpc:/data/git/gci$ ls -al
+total 12
+drwxr-sr-x 3 marcilr sshfs 4096 Feb  3 08:38 .
+drwxrwsr-x 3 sshfs   sshfs 4096 Feb  3 08:37 ..
+drwxr-sr-x 7 marcilr sshfs 4096 Feb  3 08:38 .git
+htpc:/data/git/gci$
+
+2. Try "git push -u origin master" command again:
+Counting objects: 298, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (297/297), done.
+Writing objects: 100% (298/298), 38.71 KiB | 0 bytes/s, done.
+Total 298 (delta 178), reused 0 (delta 0)
+remote: error: refusing to update checked out branch: refs/heads/master
+remote: error: By default, updating the current branch in a non-bare repository
+remote: error: is denied, because it will make the index and work tree inconsistent
+remote: error: with what you pushed, and will require 'git reset --hard' to match
+remote: error: the work tree to HEAD.
+remote: error: 
+remote: error: You can set 'receive.denyCurrentBranch' configuration variable to
+remote: error: 'ignore' or 'warn' in the remote repository to allow pushing into
+remote: error: its current branch; however, this is not recommended unless you
+remote: error: arranged to update its work tree to match what you pushed in some
+remote: error: other way.
+remote: error: 
+remote: error: To squelch this message and still keep the default behaviour, set
+remote: error: 'receive.denyCurrentBranch' configuration variable to 'refuse'.
+To ssh://marcilr@home/data/git/gci
+ ! [remote rejected] master -> master (branch is currently checked out)
+error: failed to push some refs to 'ssh://marcilr@home/data/git/gci'
+marcilr@covellite:~/git/syntax/svn-to-git/src/gci$
+
+Still get same error message as previous.
+
+
+o The "git push -u origin master" command also fails.
+
+covellite:~/git/syntax/svn-to-git/src/gci$ git push -u origin master
+Counting objects: 298, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (297/297), done.
+Writing objects: 100% (298/298), 38.49 KiB | 0 bytes/s, done.
+Total 298 (delta 178), reused 0 (delta 0)
+remote: error: refusing to update checked out branch: refs/heads/master
+remote: error: By default, updating the current branch in a non-bare repository
+remote: error: is denied, because it will make the index and work tree inconsistent
+remote: error: with what you pushed, and will require 'git reset --hard' to matc
+remote: error: the work tree to HEAD.
+remote: error: 
+remote: error: You can set 'receive.denyCurrentBranch' configuration variable to
+remote: error: 'ignore' or 'warn' in the remote repository to allow pushing into
+remote: error: its current branch; however, this is not recommended unless you
+remote: error: arranged to update its work tree to match what you pushed in some
+remote: error: other way.
+remote: error: 
+remote: error: To squelch this message and still keep the default behaviour, set
+remote: error: 'receive.denyCurrentBranch' configuration variable to 'refuse'.
+To ssh://marcilr@home/data/git/gci
+ ! [remote rejected] master -> master (branch is currently checked out)
+error: failed to push some refs to 'ssh://marcilr@home/data/git/gci'
+covellite:~/git/syntax/svn-to-git/src/gci$
+
+
 Tue Feb  2 14:21:20 AKST 2016
 =============================
 Executing of svn-to-git fails when configured for home with:
