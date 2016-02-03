@@ -128,6 +128,38 @@ function process-cli-args(){
 
 
 #
+# get-credentials()
+# Get USER, PASS, TOKEN, and EMAIL credentials
+# from ~/.github
+#
+# INPUT  - ~/.github
+# OUTPUT - Sets  USER, PASS, TOKEN, and EMAIL credentials
+#
+function get-credentials {
+
+    debug "get-credentials() START"
+
+    #
+    # Source github crentials from ~/.github
+    #
+    debug "main: CREDENTIALS: ${CREDENTIALS}"
+    if [ ! -f ${CREDENTIALS} ]; then
+        message "~/.github file, with GitHub credentials (USER,PASS,EMAIL,TOKEN), not found, aborting."
+        exit 1
+    fi
+
+    . ${CREDENTIALS}
+    debug "get-credentials() USER = ${USER}"
+    debug "get-credentials() PASS = ***"
+    debug "get-credentials() EMAIL = ${EMAIL}"
+    debug "get-credentials() TOKEN = ***"
+
+    debug "get-credentials() END"
+
+} # end get-credentails()
+
+
+#
 # process-home()
 # Process git repository creation for home target.
 #
@@ -206,17 +238,8 @@ if [ -z "$1" ]; then
   exit 1
 fi
 
-# Check for ~/.github credentials file and source
-if [ ! -f ${CREDENTIALS} ]; then
-  message "${CREDENTIALS} not found, aborting."
-  exit 1
-else
-  . ${CREDENTIALS}
-  debug "main: github USER = ${USER}"
-  debug "main: github PASS = ***"
-  debug "main: github EMAIL = ${EMAIL}"
-  debug "main: github TOKEN = ***"
-fi
+# Fetch github credentials from ~/.github
+get-credentials
 
 # Get copy of command line arguments
 commandline_args=("$@")
