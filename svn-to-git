@@ -146,18 +146,7 @@ function process-cli-args(){
         esac
     done
 
-    if [[ $GITPATH == *htpc/* ]]; then
-        SERVER=htpc
-    elif [[ $GITPATH == *bornite/* ]]; then
-        SERVER=bornite
-    elif [[ $GITPATH == *malachite/* ]]; then
-        SERVER=malachite
-    elif [[ $GITPATH == *home/* ]]; then
-        SERVER=home
-    fi
-
-  debug "process-cli-args() SERVER = ${SERVER}"
-  debug "process-cli-args() END"
+    debug "process-cli-args() END"
 
 } # end process-cli-args()
 
@@ -191,6 +180,23 @@ debug "main: SVNREPO = ${SVNREPO}"
 GITREPO=`echo ${GITPATH} | ${SED} 's:.*/::g'`
 debug "main: GITREPO = ${GITREPO}"
 
+# Determine target SERVER from GITPATH
+if [[ $GITPATH == *htpc/* ]]; then
+    SERVER=htpc
+elif [[ $GITPATH == *bornite/* ]]; then
+    SERVER=bornite
+elif [[ $GITPATH == *malachite/* ]]; then
+    SERVER=malachite
+elif [[ $GITPATH == *home/* ]]; then
+    SERVER=home
+fi
+debug "main: SERVER = ${SERVER}"
+
+# Determine target PATH from GITPATH
+TARGETPATH=`echo ${GITPATH} | ${SED} "s:.*${SERVER}::g"`
+debug "main: TARGETPATH = ${TARGETPATH}"
+
+
 # Checkout subversion repo:
 if [ ! -d "${SVNREPO}" ]; then
     ${SVN} co ${SVNPATH} ${SVNREPO}
@@ -217,4 +223,4 @@ fi
 
 # $ rsync -va --stats --progress ./gci htpc:/data/git/
 
-#${RSYNC} -va --stats --progress ${GITREPO} 
+#${RSYNC} -va --stats --progress ${GITREPO}
