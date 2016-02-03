@@ -8,7 +8,41 @@ Test svn-git-conversion of subversion repo to git repo.
 
 Wed Feb  3 08:10:45 AKST 2016
 =============================
-o Remote gci repo, recreate, and try again:
+
+o Recreate gci repo by running git init with the --bare option, which
+initializes the repository without a working directory:
+--git-scm.com/book/en/v2/Git-on-the-Server-Setting-Up-the-Server
+
+1. Delete old and create fresh gci repo:
+htpc:/data/git$ rm -rf gci/
+htpc:/data/git$ mkdir gci
+htpc:/data/git$ cd gci/
+
+2. Create gci repo by running git init with the --bare option, which 
+initializes the repository without a working directory:
+
+htpc:/data/git/gci$ git init --bare
+Initialized empty Git repository in /data/git/gci/
+htpc:/data/git/gci$ 
+
+htpc:/data/git/gci$ ls
+branches  config  description  HEAD  hooks  info  objects  refs
+htpc:/data/git/gci$ 
+
+3. Push gci repo to remote:
+covellite:~/git/syntax/svn-to-git/src/gci$ git push -u origin master
+Counting objects: 298, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (297/297), done.
+Writing objects: 100% (298/298), 38.71 KiB | 0 bytes/s, done.
+Total 298 (delta 178), reused 0 (delta 0)
+To ssh://marcilr@home/data/git/gci
+ * [new branch]      master -> master
+Branch master set up to track remote branch master from origin.
+covellite:~/git/syntax/svn-to-git/src/gci$
+
+
+o Recreate gci repo and try again:
 
 1. Delete old and create fresh gci repo:
 htpc:/data/git$ rm -rf gci/
@@ -171,3 +205,18 @@ Perhaps you should specify a branch such as 'master'.
 fatal: The remote end hung up unexpectedly
 error: failed to push some refs to 'ssh://marcilr@home/data/git/gci'
 covellite:~/git/syntax/svn-to-git/src$ ./test-svn-to-git-home
+
+
+Links
+=====
+Git on the Server - Setting Up the Server
+Now, you can set up an empty repository for them by running
+git init with the --bare option, which initializes the repository
+without a working directory:
+$ cd /opt/git
+$ mkdir project.git
+$ cd project.git
+$ git init --bare
+Initialized empty Git repository in /opt/git/project.git/
+https://git-scm.com/book/en/v2/Git-on-the-Server-Setting-Up-the-Server
+
