@@ -6,13 +6,13 @@
 # Wrapper script to convert subversion repo to git.
 # Converted script is then pushed to the specified target.
 #
+# Only works for home, htpc, bornite, or malachite malachite targets
+# for now.  Need to update for github. (Wed Feb 3, 2016)
+#
 # o ${USERNAME} is used for ownership of remote
 # o Group set on remote is set to "sshfs"
 # o Privs set on remote is set to 2775 (drwxrwsr-x)
 #
-# NOTE: This script is designed to rsync converted git repo to
-#       home, htpc, bornite, or malachite.  Not updated for github
-#       yet. (Wed Feb 3, 2016)
 
 # ==============================================
 # Configuration
