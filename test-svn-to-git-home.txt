@@ -8,6 +8,26 @@ Test svn-git-conversion of subversion repo to git repo.
 
 Wed Feb  3 08:10:45 AKST 2016
 =============================
+o May have an answer to error:
+
+1. Added manifest file to gci/manifest to git repo.
+
+2. On htpc configured receive.denyCurrentBranch in gci repo:
+htpc:/data/git/gci$ git config receive.denyCurrentBranch ignore   <===
+
+3. covellite:~/git$ rm -rf gci
+
+4. resync
+
+5. covellite:~/git$ cd gci/
+covellite:~/git/gci$ ls
+docs     glossary.txt  manifest   salary.txt   svn_ext_val.txt
+gci.txt  links.txt     mysql.txt  servers.txt  TODO
+covellite:~/git/gci$
+
+Manifest to saved back to orginal gci repo on htpc.  Appears to have worked.
+
+
 
 o Decided that trying to create a new empty remote and populating it is a
 mistake.  Why not just copy the svn to git converted repo:
