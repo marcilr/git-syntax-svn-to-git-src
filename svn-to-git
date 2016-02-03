@@ -33,6 +33,7 @@ GITREPOCREATE=git-repo-create
 GREP=/bin/grep
 PERL=/usr/bin/perl
 RM=/bin/rm
+RSYNC=/usr/bin/rsync
 SED=/bin/sed
 SORT=/usr/bin/sort
 SVN=/usr/bin/svn
@@ -110,41 +111,52 @@ function usage(){
 #
 function process-cli-args(){
 
-  debug "process-cli-args() START"
+    debug "process-cli-args() START"
 
-  # Display number of command line arguments
-  debug "process-cli-args() number args=${#commandline_args[@]}"
+    # Display number of command line arguments
+    debug "process-cli-args() number args = ${#commandline_args[@]}"
 
-  # Loop over command line arguments (in correct order).
-  for ARG in "${commandline_args[@]}"; do
-    case ${ARG} in
-      "-d" | "--debug")
-        DEBUG=true
-        debug "DEBUG=true"
-        ;;
-      "-h" | "--help")
-        usage
-        exit 0
-        ;;
-      *)
-        debug "process-cli-args() processing: ${ARG}"
-       #
-       # If SVNPATH is set save GITPATH
-       #
-       # How do I check if a variable exists in bash?
-       # http://unix.stackexchange.com/questions/212183/how-do-i-check-if-a-variable-exists-in-bash
-       #
-       if [ -v SVNPATH ]; then
-            GITPATH=${ARG}
-            debug "process-cli-args() GITPATH=${GITPATH}"
-        else
-            SVNPATH=${ARG}
-            debug "process-cli-args() SVNPATH=${SVNPATH}"
-        fi
-        ;;
-    esac
-  done
+    # Loop over command line arguments (in correct order).
+    for ARG in "${commandline_args[@]}"; do
+        case ${ARG} in
+            "-d" | "--debug")
+                DEBUG=true
+                debug "DEBUG=true"
+                ;;
+            "-h" | "--help")
+                usage
+                exit 0
+                ;;
+            *)
+                debug "process-cli-args() processing: ${ARG}"
+                #
+                # If SVNPATH is set save GITPATH
+                #
+                # How do I check if a variable exists in bash?
+                # http://unix.stackexchange.com/questions/212183/how-do-i-check-if-a-variable-exists-in-bash
+                #
+                if [ -v SVNPATH ]; then
+                    GITPATH=${ARG}
+                    debug "process-cli-args() GITPATH = ${GITPATH}"
+                else
+                    SVNPATH=${ARG}
+                    debug "process-cli-args() SVNPATH = ${SVNPATH}"
+                fi
+                ;;
+        esac
+    done
 
+    if [[ $GITPATH == *htpc/* ]]; then
+        SERVER=htpc
+    elif [[ $GITPATH == *bornite/* ]]; then
+        SERVER=bornite
+    elif [[ $GITPATH == *malachite/* ]]; then
+        SERVER=malachite
+    elif [[ $GITPATH == *home/* ]]; then
+        SERVER=home
+    fi
+
+  debug "process-cli-args() SERVER = ${SERVER}"
   debug "process-cli-args() END"
 
 } # end process-cli-args()
@@ -200,21 +212,9 @@ else
     message "main: Local ${GITREPO} exists, *not* recreating."
 fi
 
-# Create new remote git repo (either github or home)
-CMD="${GITREPOCREATE} ${GITPATH}"
-debug "main: Executing ${CMD}"
-eval "${CMD}"
 
-# Set remote for locally created git repo
-CMD="cd ${GITREPO}; ${GIT} remote add origin ${GITPATH}; cd .."
-debug "main: Executing ${CMD}"
-eval "${CMD}"
+# Rsync git repository to target
 
-# Push local git repo to new remote
-cd ${GITREPO}
-${GIT} push origin --all
-${GIT} push origin --tags
-cd ..
+# $ rsync -va --stats --progress ./gci htpc:/data/git/
 
-
-
+#${RSYNC} -va --stats --progress ${GITREPO} 
