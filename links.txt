@@ -11,3 +11,16 @@ Links
 cannot push into git repository
 http://stackoverflow.com/questions/3221859/cannot-push-into-git-repository
 
+How to convert a normal Git repository to a bare one?
+git clone --bare /path/to/repo
+http://stackoverflow.com/questions/2199897/how-to-convert-a-normal-git-repository-to-a-bare-one/2199939#2199939
+
+What are the consequences of using receive.denyCurrentBranch in Git?
+You should really just push to bare Git repositories
+As pointed out in some of the other answers, you shouldn't really be pushing
+to a non-bare repository, for the reasons I pointed out above, and which Git
+itself is telling you.
+http://stackoverflow.com/questions/12265729/what-are-the-consequences-of-using-receive-denycurrentbranch-in-git
+
+What is this Git warning message when pushing changes to a remote repository?
+http://stackoverflow.com/questions/804545/what-is-this-git-warning-message-when-pushing-changes-to-a-remote-repository?lq=1
