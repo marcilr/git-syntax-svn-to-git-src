@@ -135,3 +135,5 @@ commandline_args=("$@")
 process-cli-args
 
 debug "main: SVNPATH = ${SVNPATH}"
+
+${FIND} ${SVNPATH} -type d | grep -v "\.svn"
