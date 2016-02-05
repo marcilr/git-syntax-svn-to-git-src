@@ -1,0 +1,30 @@
+svn-to-git.txt
+Created Thu Feb  4 21:23:44 AKST 2016
+Copyright (C) 2016 by Raymond E. Marcil <marcilr@gmail.com>
+
+
+svn to git migration
+
+
+Example
+=======
+$ git svn clone svn+ssh://home/data/svnroot/jobs/jobs \
+--authors-file=./authors.txt \
+--no-metadata \
+jobs
+Initialized empty Git repository in /home/marcilr/git/syntax/svn-to-git/src/jobs/.git/
+        A       svn_ext_val.txt
+r1 = 3f1f8faae26d7f2215c5f03ad2a1238cc0b92396 (refs/remotes/git-svn)
+r2 = 7a37dc8fb6f660ef9b37bfc8a5f7b495a499dda7 (refs/remotes/git-svn)
+        M       svn_ext_val.txt
+r3 = f98fd81c1b0b2a701ce8788f552c17024b9e6a2e (refs/remotes/git-svn)
+        M       svn_ext_val.txt
+...
+r87 = df633f447b4a157dff8c83f3d8f55516bb0d17a4 (refs/remotes/git-svn)
+        M       links.txt
+r88 = a0b10e129a47a3d44166a022b45eae8c45729ee5 (refs/remotes/git-svn)
+        M       links.txt
+r89 = 6d03a5e15611744e84042cea8a08b5d741d3a1e0 (refs/remotes/git-svn)
+Checked out HEAD:
+  svn+ssh://home/data/svnroot/jobs/jobs r89
+$
