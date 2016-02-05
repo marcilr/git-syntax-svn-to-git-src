@@ -5,6 +5,10 @@ Copyright (C) 2016 by Raymond E. Marcil <marcilr@gmail.com>
 
 Filelist
 ========
+get-convert-list
+  Script to build a list of repositories to create given a directory to start
+  from in the hierarchical list of directories.
+
 git-create
   Create new empty remote git repository via ssh
   Usage: git-create <remote-url>
