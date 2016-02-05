@@ -20,8 +20,9 @@ DEBUG=true
 # ==============================================
 # Binaries
 # ==============================================
+GREP=/bin/grep
 FIND=/usr/bin/find
-
+SED=/bin/sed
 
 # ==============================================
 # Functions
@@ -102,7 +103,7 @@ function process-cli-args(){
       *)
         debug "process-cli-args() processing: ${ARG}"
         SVNPATH=${ARG}
-        debug "process-cli-args() SNVPATH=${SVNPATH}"
+        debug "process-cli-args() SVNPATH=${SVNPATH}"
         ;;
     esac
   done
@@ -136,4 +137,15 @@ process-cli-args
 
 debug "main: SVNPATH = ${SVNPATH}"
 
-${FIND} ${SVNPATH} -type d | grep -v "\.svn"
+${FIND} ${SVNPATH} -type d | ${GREP} -v "\.svn" | while read DIR; do
+#    echo "${DIR}" | ${SED} 's!/home/marcilr/svn!svn+ssh://home/data/svnroot!g'
+    SVN=`echo "${DIR}" | ${SED} 's!/home/marcilr/svn!svn+ssh://home/data/svnroot!g'`
+
+    GIT=`echo "${DIR}" | ${SED} 's!/home/marcilr/svn!ssh://htpc/data/git!g'`
+    echo "${SVN} ${GIT}" 
+
+
+done
+
+#/home/marcilr/svn/
+
