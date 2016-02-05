@@ -1,0 +1,11 @@
+packages.txt
+Created Thu Feb  4 21:18:16 AKST 2016
+Copyright (C) 2016 by Raymond E. Marcil <marcilr@gmail.com>
+
+
+Packages for svn to git
+
+
+git - fast, scalable, distributed revision control system
+git-extras - Extra commands for git
+git-svn - fast, scalable, distributed revision control system (svn interoperability)
