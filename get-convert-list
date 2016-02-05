@@ -63,7 +63,7 @@ function usage(){
   message "   -h | --help         Create non-hierarchical repository."
   message "   <local svn repo>    Subversion repo directory in"
   message "                       repository hiearhierarchy to build"
-  messsge "                       conversion list from."
+  message "                       conversion list from."
 }
 
 
