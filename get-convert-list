@@ -101,14 +101,11 @@ function process-cli-args(){
         ;;
       *)
         debug "process-cli-args() processing: ${ARG}"
-        REPOPATH=${ARG}
-        debug "process-cli-args() REPOPATH=${REPOPATH}"
+        SVNPATH=${ARG}
+        debug "process-cli-args() SNVPATH=${SVNPATH}"
         ;;
     esac
   done
-
-  debug "process-cli-args() GITREPO = ${GITREPO}"
-  debug "process-cli-args() GITREMOTE = ${GITREMOTE}"
 
   debug "process-cli-args() END"
 
@@ -131,3 +128,10 @@ if [ -z "$1" ]; then
   exit 1
 fi
 
+# Get copy of command line arguments
+commandline_args=("$@")
+
+# Process command line arguments
+process-cli-args
+
+debug "main: SVNPATH = ${SVNPATH}"
