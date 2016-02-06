@@ -6,7 +6,12 @@
 # Script to build a list of repositories to create given a directory to start
 # from in the hierarchical list of directories.
 #
-
+# Example
+# =======
+# To get gci/ repo conversion list:
+#   ./get-convert-list /data/svnroot/gci
+#
+#
 # ==============================================
 # Configuration
 # ==============================================
@@ -23,6 +28,8 @@ DEBUG=true
 GREP=/bin/grep
 FIND=/usr/bin/find
 SED=/bin/sed
+SSH=/usr/bin/ssh
+
 
 # ==============================================
 # Functions
@@ -70,7 +77,8 @@ function usage(){
   message "   -h | --help         Create non-hierarchical repository."
   message "   <local svn repo>    Subversion repo directory in"
   message "                       repository hiearhierarchy to build"
-  message "                       conversion list from."
+  message "                       conversion list from. Like:"
+  message "                         /data/svnroot/gci"
 }
 
 
@@ -137,15 +145,20 @@ process-cli-args
 
 debug "main: SVNPATH = ${SVNPATH}"
 
-${FIND} ${SVNPATH} -type d | ${GREP} -v "\.svn" | while read DIR; do
-#    echo "${DIR}" | ${SED} 's!/home/marcilr/svn!svn+ssh://home/data/svnroot!g'
-    SVN=`echo "${DIR}" | ${SED} 's!/home/marcilr/svn!svn+ssh://home/data/svnroot!g'`
+#
+# All of the subversion repositories have a db/ subdirectory.
+# This is a fine marking for positively locating the individual
+# subversion repos.
+#
 
-    GIT=`echo "${DIR}" | ${SED} 's!/home/marcilr/svn!ssh://htpc/data/git!g'`
-    echo "${SVN} ${GIT}" 
+# $ /usr/bin/ssh htpc '/usr/bin/find /data/svnroot/ -type d -name db'
 
+CMD="${SSH} htpc '${FIND} ${SVNPATH} -type d -name db'"
+debug "Executing: ${CMD}"
 
+eval "${CMD}" | while read DIR; do
+   SRC=`echo "${DIR}" | ${SED} 's:/db::g' | ${SED} "s!/data/svnroot/!svn+ssh://data/svnroot/!g"`
+   TAR=`echo "${DIR}" | ${SED} 's:/db::g' | ${SED} "s!/data/svnroot/!ssh://htpc/data/svnroot/!g"`
+
+   echo "${SRC} ${TAR}"
 done
-
-#/home/marcilr/svn/
-
