@@ -6,6 +6,8 @@
 # Script to build a list of repositories to create given a directory to start
 # from in the hierarchical list of directories.
 #
+# Only works against htpc /data/svnroot/ targets at this point.
+#
 # Example
 # =======
 # To get gci/ repo conversion list:
@@ -19,7 +21,7 @@
 #
 # Enable/disable debugging.
 #
-DEBUG=true
+DEBUG=false
 
 
 # ==============================================
