@@ -48,13 +48,19 @@ github-repo-create
 process.txt
   Subversion to git conversion process
 
-svn-to-git-convert
-  Convert subversion repository to git
-
 svn-to-git-authors
   Script to extract users from subversion repository to users.txt file.
   The marcilr, and root users have users.txt entries cleaned up.
   Other users will have to have name and email updated in users.txt
+
+svn-to-git-convert
+  Convert subversion repository to git
+
+svn-to-git-loop
+  Script to loop over a list of svn+ssh:// subversion sources
+  and ssh:// gti repository targets to convert using svn-to-git.
+
+  Only only works with htpc /data/svnroot repos at this point.
 
 test
   Test driver for svn-to-git
