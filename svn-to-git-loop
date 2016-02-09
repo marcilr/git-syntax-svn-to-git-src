@@ -19,12 +19,15 @@
 #
 DEBUG=true
 
+OUTFILE="git-repos-to-add.txt"
 
 # ==============================================
 # Binaries
 # ==============================================
-GREP=/bin/grep
+CAT=/bin/cat
+CUT=/usr/bin/cut
 FIND=/usr/bin/find
+GREP=/bin/grep
 SED=/bin/sed
 SSH=/usr/bin/ssh
 
@@ -136,7 +139,21 @@ if [ -z "$1" ]; then
   exit 1
 fi
 
+# Loop over rfepo list file
+${CAT} ${1} | while read LINE; do
 
+  echo ${LINE}
+  SVN=`echo ${LINE} | ${CUT} -d ' ' -f 1 `
+  TOCUT=`echo ${LINE} | ${CUT} -d ' ' -f 2 | ${SED} 's:.*/::g'`
+  GIT=`echo ${LINE} | ${CUT} -d ' ' -f 2 | ${SED} "s:/${TOCUT}::g" | ${SED} 's/svnroot/git/g'`
+  REPO=`echo ${GIT} | ${SED} "s!ssh://htpc/data/!!g"`
+
+  debug "main: TOCUT = ${TOCUT}"
+  debug "main: SVN = ${SVN}"
+  debug "main: GIT = ${GIT}"
+  debug "main: REPO = ${REPO}"
+
+done
 
 debug "svn-to-git-loop END"
 
