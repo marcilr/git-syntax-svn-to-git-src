@@ -4,7 +4,7 @@
 # Copyright (C) 2016 by Raymond E. Marcil <marcilr@gmail.com>
 #
 # Script to loop over a list of svn+ssh:// subversion sources
-# and ssh:// gti repository targets to convert using svn-to-git.
+# and ssh:// git repository targets to convert using svn-to-git.
 #
 # Only only works with htpc /data/svnroot repos at this point.
 #
@@ -71,13 +71,14 @@ function message {
 # Display usage and exit.
 #
 function usage(){
-  message "Usage: ${0} <local svn repo>"
-  message "   -d | --debug        Enable debugging."
-  message "   -h | --help         Create non-hierarchical repository."
-  message "   <local svn repo>    Subversion repo directory in"
-  message "                       repository hiearhierarchy to build"
-  message "                       conversion list from. Like:"
-  message "                         /data/svnroot/gci"
+  message "Usage: ${0} <svn to git repo mapping >"
+  message "   -d | --debug                Enable debugging."
+  message "   -h | --help                 Create non-hierarchical repository."
+  message "   <svn to git repo mapping>   List of svn+ssh:// subversion sources"
+  message "                               and ssh:// git repository targets to"
+  message "                               convert using svn-to-git."
+  message " Example repo mapping line:"
+  message "   svn+ssh://htpc/svnroot/maps ssh://htpc/git/maps"
 }
 
 
