@@ -119,3 +119,23 @@ function process-cli-args(){
   debug "process-cli-args() END"
 
 } # end process-cli-args()
+
+# ==============================================
+# Main
+# ==============================================
+debug "svn-to-git-loop START"
+
+# Check argument count
+ARGCOUNT=$#
+debug "main: ARGCOUNT=$#"
+
+# Print usage and abort if no arguments
+if [ -z "$1" ]; then
+  usage
+  exit 1
+fi
+
+
+
+debug "svn-to-git-loop END"
+
