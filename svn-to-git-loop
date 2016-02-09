@@ -1,0 +1,121 @@
+#!/bin/bash
+# svn-to-git-loop
+# Created Fri Feb  5 15:22:36 AKST 2016
+# Copyright (C) 2016 by Raymond E. Marcil <marcilr@gmail.com>
+#
+# Script to loop over a list of svn+ssh:// subversion sources
+# and ssh:// gti repository targets to convert using svn-to-git.
+#
+# Only only works with htpc /data/svnroot repos at this point.
+#
+
+
+# ==============================================
+# Configuration
+# ==============================================
+
+#
+# Enable/disable debugging.
+#
+DEBUG=true
+
+
+# ==============================================
+# Binaries
+# ==============================================
+GREP=/bin/grep
+FIND=/usr/bin/find
+SED=/bin/sed
+SSH=/usr/bin/ssh
+
+
+# ==============================================
+# Functions
+# ==============================================
+
+#
+# debug()
+# Output debugging text.
+# INPUT: $1 - Text to output if DEBUG="
+#
+function debug {
+
+  if [ ${DEBUG} = "true" ]; then
+    echo "debug() ${1}"
+  fi
+
+}
+
+
+#
+# message()
+# Display specified message passed as argument.
+#
+# INPUT
+# =====
+# Message to display as argument.
+#
+# RESULTS
+# =======
+# Displays argument to stdio.
+#
+function message {
+
+  echo "${1}"
+
+}
+
+
+#
+# usage()
+# Display usage and exit.
+#
+function usage(){
+  message "Usage: ${0} <local svn repo>"
+  message "   -d | --debug        Enable debugging."
+  message "   -h | --help         Create non-hierarchical repository."
+  message "   <local svn repo>    Subversion repo directory in"
+  message "                       repository hiearhierarchy to build"
+  message "                       conversion list from. Like:"
+  message "                         /data/svnroot/gci"
+}
+
+
+
+#
+# process-cli-args()
+#
+# Links
+# =====
+# How to process command-line args in bash scripts
+# http://debaan.blogspot.com/2007/06/how-to-process-command-line-args-in.html
+#
+function process-cli-args(){
+
+  debug "process-cli-args() START"
+
+  # Display number of command line arguments
+  debug "process-cli-args() number args=${#commandline_args[@]}"
+
+  # Loop over command line arguments (in correct order).
+  for ARG in "${commandline_args[@]}"; do
+    case ${ARG} in
+      "-d" | "--debug")
+        DEBUG=true
+        debug "DEBUG=true"
+        ;;
+      "-h" | "--help")
+        usage
+        exit 0
+        ;;
+      *)
+        debug "process-cli-args() processing: ${ARG}"
+        LIST=${ARG}
+        debug "process-cli-args() LIST=${LIST}"
+        ;;
+    esac
+  done
+
+  debug "process-cli-args() END"
+
+} # end process-cli-args()
