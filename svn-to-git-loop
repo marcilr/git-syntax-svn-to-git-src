@@ -153,8 +153,8 @@ ${CAT} ${1} | while read LINE; do
   debug "main: GIT = ${GIT}"
   debug "main: REPO = ${REPO}"
 
-#  CMD="${SVNTOGIT} ${SVN} ${GIT}"
-#  echo "main: CMD = ${CMD}"
+  CMD="${SVNTOGIT} ${SVN} ${GIT}"
+  echo "main: CMD = ${CMD}"
 #  eval "${CMD}"
 
 done
