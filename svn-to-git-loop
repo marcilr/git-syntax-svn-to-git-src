@@ -139,6 +139,13 @@ if [ -z "$1" ]; then
   exit 1
 fi
 
+# Get copy of command line arguments
+commandline_args=("$@")
+
+# Process command line arguments
+process-cli-args
+
+
 # Loop over rfepo list file
 ${CAT} ${1} | while read LINE; do
 
