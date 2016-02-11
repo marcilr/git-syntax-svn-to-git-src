@@ -8,6 +8,10 @@
 #
 # Only only works with htpc /data/svnroot repos at this point.
 #
+# Removes svn and gti directories created in current working
+# directory.  I.e. Be sure to run this script in a temporary
+# directory to alleviate directory name conflicts.
+#
 
 
 # ==============================================
@@ -19,7 +23,13 @@
 #
 DEBUG=true
 
-OUTFILE="git-repos-to-add.txt"
+MANIFEST="manifest"
+
+#
+# Field location of git path in manifest
+# for attractive formatting
+#
+SPACEFIELD=81
 
 # ==============================================
 # Binaries
@@ -28,6 +38,7 @@ CAT=/bin/cat
 CUT=/usr/bin/cut
 FIND=/usr/bin/find
 GREP=/bin/grep
+RM=/bin/rm
 SED=/bin/sed
 SSH=/usr/bin/ssh
 SVNTOGIT=svn-to-git
@@ -145,26 +156,95 @@ commandline_args=("$@")
 # Process command line arguments
 process-cli-args
 
+# Check for existence of repo list file
+if [ ! -f "${LIST}" ]; then
+   message "main: ${LIST} not found, aborting"
+   exit 1
+else
+   message "main: Found ${LIST} mapping file"
+fi
 
-# Loop over rfepo list file
-${CAT} ${1} | while read LINE; do
+#
+# Loop over list of svn to git mappings in 
+# file and convert.
+#
+debug "main: Looping over ${LIST} file"
+
+# Remove old manifest file if it exists.
+CMD="${RM} -f ${MANIFEST}"
+debug "main: Executing ${CMD}"
+eval "${CMD}"
+
+#${CAT} ${LIST} | while read LINE; do
+while read LINE; do
 
   echo ${LINE}
-  SVN=`echo ${LINE} | ${CUT} -d ' ' -f 1 `
-  TOCUT=`echo ${LINE} | ${CUT} -d ' ' -f 2 | ${SED} 's:.*/::g'`
-  GIT=`echo ${LINE} | ${CUT} -d ' ' -f 2 | ${SED} "s:/${TOCUT}$::1" | ${SED} 's/svnroot/git/g'`
-  REPO=`echo ${GIT} | ${SED} "s!ssh://htpc/data/!!g"`
+  SVNURL=`echo ${LINE} | ${CUT} -d ' ' -f 1 `
+  GITURL=`echo ${LINE} | ${CUT} -d ' ' -f 2 `
+  REPO=`echo ${LINE} | ${CUT} -d ' ' -f 2 | ${SED} 's:.*/::g'`
+  REPOPATH=`echo ${LINE} | ${CUT} -d ' ' -f 2 | ${SED} 's:^.*git/::'`
 
-  debug "main: TOCUT = ${TOCUT}"
-  debug "main: SVN = ${SVN}"
-  debug "main: GIT = ${GIT}"
+  # Like svn+ssh://htpc/data/svnroot/gci/projects/wti/RPC-40L8A4-OLD/RPC-40L8A4-OLD
+  debug "main: SVNURL = ${SVNURL}"
+
+  # Like ssh://htpc/data/git/gci/projects/wti/RPC-40L8A4-OLD
+  debug "main: GITURL = ${GITURL}"
+  
+  # Like RPC-40L8A4-OLD
   debug "main: REPO = ${REPO}"
 
-  CMD="${SVNTOGIT} ${SVN} ${GIT}"
-  echo "main: CMD = ${CMD}"
-#  eval "${CMD}"
+  # Like /gci/projects/wti/RPC-40L8A4-OLD
+  debug "main: REPOPATH = ${REPOPATH}"
 
-done
+  #
+  # FIXME: This call to svn-to-git works.
+  #        However, the while loop over ${LIST} file
+  #        fails to continue to next item.
+  #        Bit Strange.
+  #
+  CMD="${SVNTOGIT} ${SVNURL} ${GITURL}"
+  echo "main: Executing CMD = ${CMD}"
+  #eval "${CMD}"
+  bash -c "${CMD}"
+
+  LENGTH=${#GITURL}
+  debug "main: LENGTH = ${LENGTH}"
+
+  #
+  # Calculate number of spaces to put 2nd gitpath field
+  # in manifest at attaactive location for each entry.
+  #
+  SPACESNUM=`expr ${SPACEFIELD} - ${LENGTH}`
+  SPACES=`printf  %${SPACESNUM}s` 
+  debug "main: SPACESNUM = ${SPACEFIELD} - ${LENGTH} = ${SPACESNUM}"
+  
+  # Updated manifest file
+  CMD="echo \"${GITURL}${SPACES}${REPOPATH}\" >> ${MANIFEST}"
+  debug "main: Executing ${CMD}"
+  eval "${CMD}"
+  
+  debug "main: Cleanup..."
+  debug "main: Removing ${REPO} (created in current working directory)"
+  CMD="${RM} -rf ${REPO}"
+  debug "main: Executing ${CMD}"
+  eval "${CMD}"
+  
+  debug "main: Removing ${REPO}-svn (created in current working directory)"
+  CMD="${RM} -rf ${REPO}-svn"
+  debug "main: Executing ${CMD}"
+  eval "${CMD}"
+
+  #
+  # The while loop aborting when svn-to-gti was called within it.
+  # Must be a variable being set or such.  Have tried both eval and
+  # bash -c.  Same result.
+  # Unsure why, hence manual intervention required.
+  #
+  # NOTE: Script still exits with continue belong.
+  #
+  continue
+
+done < ${LIST}
 
 debug "svn-to-git-loop END"
 
