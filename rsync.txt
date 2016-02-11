@@ -8,6 +8,5 @@ rsync
 
 Example
 =======
-covellite:~/git/gci/support$ rsync -va --stats --progress \
-tac htpc:/data/git/support
+covellite:~/git/gci$ rsync -va --stats --progress support htpc:/data/git/gci
 
