@@ -1,0 +1,13 @@
+rsync.txt
+Created Thu Feb 11 13:49:12 AKST 2016
+Copyright (C) 2016 by Raymond E. Marcil <marcilr@gmail.com>
+
+
+rsync
+
+
+Example
+=======
+covellite:~/git/gci/support$ rsync -va --stats --progress \
+tac htpc:/data/git/support
+
