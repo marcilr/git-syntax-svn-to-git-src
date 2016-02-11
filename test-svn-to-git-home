@@ -16,9 +16,14 @@
 DEBUG=true
 
 AUTHORS=authors.txt
-SVNPATH=svn+ssh://home/data/svnroot/gci/gci
-GITPATH=ssh://marcilr@home/data/git/gci
+#SVNPATH=svn+ssh://home/data/svnroot/gci/gci
+#GITPATH=ssh://marcilr@home/data/git/gci
 
+#SVNPATH=svn+ssh://home/data/svnroot/gci/benefits/401k/401k
+#GITPATH=ssh://htpc/data/git/gci/benefits/401k
+
+SVNPATH=svn+ssh://home/data/svnroot/gci/vmware/vmware
+GITPATH=ssh://htpc/data/git/gci/vmware
 
 # ==============================================
 # Binaries
