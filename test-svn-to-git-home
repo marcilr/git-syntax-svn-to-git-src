@@ -25,8 +25,15 @@ AUTHORS=authors.txt
 #SVNPATH=svn+ssh://home/data/svnroot/gci/vmware/vmware
 #GITPATH=ssh://htpc/data/git/gci/vmware
 
-SVNPATH=svn+ssh://home/data/svnroot/gci/projects/projects
-GITPATH=ssh://htpc/data/git/gci/projects
+#SVNPATH=svn+ssh://home/data/svnroot/gci/relevance/relevance
+#GITPATH=ssh://htpc/data/git/gci/relevance
+
+#SVNPATH=svn+ssh://home/data/svnroot/gci/relevance/applications/applications
+#GITPATH=ssh://htpc/data/git/gci/relevance/apps
+
+SVNPATH=svn+ssh://home/data/svnroot/gci/relevance/applications/filexfer/filexfer
+GITPATH=ssh://htpc/data/git/gci/relevance/applications/filexfer
+
 
 
 # ==============================================
