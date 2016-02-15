@@ -1,4 +1,4 @@
-#!/bin/bin/python
+#!/usr/bin/python
 # svn-to-git-loop.py
 # Created Thu Feb 11 16:54:30 AKST 2016
 # Copyright (C) 2016 by Raymond E. Marcil <marcilr@gmail.com>
