@@ -15,3 +15,7 @@
 # Ported from bash to python since the bash while loop would
 # not continue with external svn-to-git was called.
 #
+
+
+print "svn-to-git-loop.py - convert hierarchical svn repo to git"
+
