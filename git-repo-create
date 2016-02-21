@@ -90,7 +90,7 @@ function message {
 # Display usage and exit.
 #
 function usage(){
-  message "Usage: ${0} <git repo> <git target repo>"
+  message "Usage: ${0} <git repo>"
   message "   -d | --debug        Enable debugging."
   message "   -h | --help         Create non-hierarchical repository."
   message "   <git repo>          Git repostory local or remote to create.  Like:"

@@ -272,6 +272,11 @@ CMD="${SSH} ${TARGETSERVER} '${CHMOD} ${PRIVS} ${TARGETPATH}/${GITREPO}'"
 debug "main: Executing ${CMD}"
 eval "${CMD}"
 
+# Alleviate non-bare repository error
+CMD="${SSH} ${TARGETSERVER} 'cd ${TARGETPATH}/${GITREPO}; ${GIT} config receive.denyCurrentBranch ignore'"
+debug "main: Executing ${CMD}"
+eval "${CMD}"
+
 # Set ownership on remote
 CMD="${SSH} ${TARGETSERVER} '${CHOWN} -R ${USERNAME}:${GROUP} ${TARGETPATH}/${GITREPO}'"
 debug "main: Executing ${CMD}"

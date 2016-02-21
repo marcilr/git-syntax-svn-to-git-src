@@ -1,0 +1,250 @@
+#!/bin/bash
+# svn-to-git-loop
+# Created Fri Feb  5 15:22:36 AKST 2016
+# Copyright (C) 2016 by Raymond E. Marcil <marcilr@gmail.com>
+#
+# Script to loop over a list of svn+ssh:// subversion sources
+# and ssh:// git repository targets to convert using svn-to-git.
+#
+# Only only works with htpc /data/svnroot repos at this point.
+#
+# Removes svn and gti directories created in current working
+# directory.  I.e. Be sure to run this script in a temporary
+# directory to alleviate directory name conflicts.
+#
+
+
+# ==============================================
+# Configuration
+# ==============================================
+
+#
+# Enable/disable debugging.
+#
+DEBUG=true
+
+MANIFEST="manifest"
+
+#
+# Field location of git path in manifest
+# for attractive formatting
+#
+SPACEFIELD=81
+
+# ==============================================
+# Binaries
+# ==============================================
+CAT=/bin/cat
+CUT=/usr/bin/cut
+FIND=/usr/bin/find
+GREP=/bin/grep
+RM=/bin/rm
+SED=/bin/sed
+SSH=/usr/bin/ssh
+SVNTOGIT=svn-to-git
+
+# ==============================================
+# Functions
+# ==============================================
+
+#
+# debug()
+# Output debugging text.
+# INPUT: $1 - Text to output if DEBUG="
+#
+function debug {
+
+  if [ ${DEBUG} = "true" ]; then
+    echo "debug() ${1}"
+  fi
+
+}
+
+
+#
+# message()
+# Display specified message passed as argument.
+#
+# INPUT
+# =====
+# Message to display as argument.
+#
+# RESULTS
+# =======
+# Displays argument to stdio.
+#
+function message {
+
+  echo "${1}"
+
+}
+
+
+#
+# usage()
+# Display usage and exit.
+#
+function usage(){
+  message "Usage: ${0} <svn to git repo mapping >"
+  message "   -d | --debug                Enable debugging."
+  message "   -h | --help                 Create non-hierarchical repository."
+  message "   <svn to git repo mapping>   List of svn+ssh:// subversion sources"
+  message "                               and ssh:// git repository targets to"
+  message "                               convert using svn-to-git."
+  message " Example repo mapping line:"
+  message "   svn+ssh://htpc/svnroot/maps ssh://htpc/git/maps"
+}
+
+
+
+#
+# process-cli-args()
+#
+# Links
+# =====
+# How to process command-line args in bash scripts
+# http://debaan.blogspot.com/2007/06/how-to-process-command-line-args-in.html
+#
+function process-cli-args(){
+
+  debug "process-cli-args() START"
+
+  # Display number of command line arguments
+  debug "process-cli-args() number args=${#commandline_args[@]}"
+
+  # Loop over command line arguments (in correct order).
+  for ARG in "${commandline_args[@]}"; do
+    case ${ARG} in
+      "-d" | "--debug")
+        DEBUG=true
+        debug "DEBUG=true"
+        ;;
+      "-h" | "--help")
+        usage
+        exit 0
+        ;;
+      *)
+        debug "process-cli-args() processing: ${ARG}"
+        LIST=${ARG}
+        debug "process-cli-args() LIST=${LIST}"
+        ;;
+    esac
+  done
+
+  debug "process-cli-args() END"
+
+} # end process-cli-args()
+
+# ==============================================
+# Main
+# ==============================================
+debug "svn-to-git-loop START"
+
+# Check argument count
+ARGCOUNT=$#
+debug "main: ARGCOUNT=$#"
+
+# Print usage and abort if no arguments
+if [ -z "$1" ]; then
+  usage
+  exit 1
+fi
+
+# Get copy of command line arguments
+commandline_args=("$@")
+
+# Process command line arguments
+process-cli-args
+
+# Check for existence of repo list file
+if [ ! -f "${LIST}" ]; then
+   message "main: ${LIST} not found, aborting"
+   exit 1
+else
+   message "main: Found ${LIST} mapping file"
+fi
+
+#
+# Loop over list of svn to git mappings in 
+# file and convert.
+#
+debug "main: Looping over ${LIST} file"
+
+# Remove old manifest file if it exists.
+CMD="${RM} -f ${MANIFEST}"
+debug "main: Executing ${CMD}"
+eval "${CMD}"
+
+#${CAT} ${LIST} | while read LINE; do
+while read LINE; do
+
+  echo ${LINE}
+  SVNURL=`echo ${LINE} | ${CUT} -d ' ' -f 1 `
+  GITURL=`echo ${LINE} | ${CUT} -d ' ' -f 2 `
+  REPO=`echo ${LINE} | ${CUT} -d ' ' -f 2 | ${SED} 's:.*/::g'`
+  REPOPATH=`echo ${LINE} | ${CUT} -d ' ' -f 2 | ${SED} 's:^.*git/::'`
+
+  # Like svn+ssh://htpc/data/svnroot/gci/projects/wti/RPC-40L8A4-OLD/RPC-40L8A4-OLD
+  debug "main: SVNURL = ${SVNURL}"
+
+  # Like ssh://htpc/data/git/gci/projects/wti/RPC-40L8A4-OLD
+  debug "main: GITURL = ${GITURL}"
+  
+  # Like RPC-40L8A4-OLD
+  debug "main: REPO = ${REPO}"
+
+  # Like /gci/projects/wti/RPC-40L8A4-OLD
+  debug "main: REPOPATH = ${REPOPATH}"
+
+  #
+  # FIXME: This call to svn-to-git works.
+  #        However, the while loop over ${LIST} file
+  #        fails to continue to next item.
+  #        Bit Strange.
+  #
+  CMD="${SVNTOGIT} ${SVNURL} ${GITURL}"
+  echo "main: Executing CMD = ${CMD}"
+  #eval "${CMD}"
+  bash -c "${CMD}"
+
+  LENGTH=${#GITURL}
+  debug "main: LENGTH = ${LENGTH}"
+
+  #
+  # Calculate number of spaces to put 2nd gitpath field
+  # in manifest at attaactive location for each entry.
+  #
+  SPACESNUM=`expr ${SPACEFIELD} - ${LENGTH}`
+  SPACES=`printf  %${SPACESNUM}s` 
+  debug "main: SPACESNUM = ${SPACEFIELD} - ${LENGTH} = ${SPACESNUM}"
+  
+  # Updated manifest file
+  CMD="echo \"${GITURL}${SPACES}${REPOPATH}\" >> ${MANIFEST}"
+  debug "main: Executing ${CMD}"
+  eval "${CMD}"
+  
+  debug "main: Cleanup..."
+  debug "main: Removing ${REPO} (created in current working directory)"
+  CMD="${RM} -rf ${REPO}"
+  debug "main: Executing ${CMD}"
+  eval "${CMD}"
+  
+  debug "main: Removing ${REPO}-svn (created in current working directory)"
+  CMD="${RM} -rf ${REPO}-svn"
+  debug "main: Executing ${CMD}"
+  eval "${CMD}"
+
+  #
+  # The while loop aborting when svn-to-gti was called within it.
+  # Must be a variable being set or such.  Have tried both eval and
+  # bash -c.  Same result.
+  # Unsure why, hence manual intervention required.
+  #
+  # NOTE: Script still exits with continue belong.
+  #
+  continue
+
+done < ${LIST}
+
+debug "svn-to-git-loop END"
+

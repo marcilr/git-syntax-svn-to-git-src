@@ -10,6 +10,16 @@ get-convert-list
   from in the hierarchical list of directories.
   get-convert-list <local svn repo>
 
+  Script to build a list of repositories to create given a directory to start
+  from in the hierarchical list of directories.
+
+  Only works against htpc /data/svnroot/ targets at this point.
+
+  Example
+  =======
+  To get gci/ repo conversion list:
+    ./get-convert-list /data/svnroot/gci
+
 git-create
   Create new empty remote git repository via ssh
   Usage: git-create <remote-url>
@@ -38,13 +48,32 @@ github-repo-create
 process.txt
   Subversion to git conversion process
 
-svn-to-git-convert
-  Convert subversion repository to git
-
 svn-to-git-authors
   Script to extract users from subversion repository to users.txt file.
   The marcilr, and root users have users.txt entries cleaned up.
   Other users will have to have name and email updated in users.txt
+
+svn-to-git-convert
+  Convert subversion repository to git
+
+svn-to-git-loop
+  Script to loop over a list of svn+ssh:// subversion sources
+  and ssh:// gti repository targets to convert using svn-to-git.
+
+  Only only works with htpc /data/svnroot repos at this point.
+
+svn-to-git-loop.py
+  Script to loop over a list of svn+ssh:// subversion sources
+  and ssh:// git repository targets to convert using svn-to-git.
+
+  Only only works with htpc /data/svnroot repos at this point.
+
+  Removes svn and gti directories created in current working
+  directory.  I.e. Be sure to run this script in a temporary
+  directory to alleviate directory name conflicts.
+
+  Ported from bash to python since the bash while loop would
+  not continue with external svn-to-git was called.
 
 test
   Test driver for svn-to-git

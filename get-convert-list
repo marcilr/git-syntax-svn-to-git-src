@@ -6,6 +6,8 @@
 # Script to build a list of repositories to create given a directory to start
 # from in the hierarchical list of directories.
 #
+# Only works against htpc /data/svnroot/ targets at this point.
+#
 # Example
 # =======
 # To get gci/ repo conversion list:
@@ -19,7 +21,7 @@
 #
 # Enable/disable debugging.
 #
-DEBUG=true
+DEBUG=false
 
 
 # ==============================================
@@ -157,8 +159,13 @@ CMD="${SSH} htpc '${FIND} ${SVNPATH} -type d -name db'"
 debug "Executing: ${CMD}"
 
 eval "${CMD}" | while read DIR; do
-   SRC=`echo "${DIR}" | ${SED} 's:/db::g' | ${SED} "s!/data/svnroot/!svn+ssh://data/svnroot/!g"`
+   SRC=`echo "${DIR}" | ${SED} 's:/db::g' | ${SED} "s!/data/svnroot/!svn+ssh://htpc/data/svnroot/!g"`
    TAR=`echo "${DIR}" | ${SED} 's:/db::g' | ${SED} "s!/data/svnroot/!ssh://htpc/data/svnroot/!g"`
+   TAR=`echo "${TAR}" | ${SED} 's/svnroot/git/1'`
+
+   # FIXME: Sed to remove duplicate repo string from end of git target URL?
+   LASTFIELD=`echo ${TAR} | ${SED} 's:\(.*\)/::g'`
+   TAR=`echo ${TAR} | ${SED} "s:/${LASTFIELD}$::1"`
 
    echo "${SRC} ${TAR}"
 done
