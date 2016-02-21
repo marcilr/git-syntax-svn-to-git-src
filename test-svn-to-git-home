@@ -31,9 +31,11 @@ AUTHORS=authors.txt
 #SVNPATH=svn+ssh://home/data/svnroot/gci/relevance/applications/applications
 #GITPATH=ssh://htpc/data/git/gci/relevance/apps
 
-SVNPATH=svn+ssh://home/data/svnroot/gci/relevance/applications/filexfer/filexfer
-GITPATH=ssh://htpc/data/git/gci/relevance/applications/filexfer
+#SVNPATH=svn+ssh://home/data/svnroot/gci/relevance/applications/filexfer/filexfer
+#GITPATH=ssh://htpc/data/git/gci/relevance/applications/filexfer
 
+SVNPATH=svn+ssh://home/data/svnroot/ideas/ideas
+GITPATH=ssh://htpc/data/git/ideas
 
 
 # ==============================================
