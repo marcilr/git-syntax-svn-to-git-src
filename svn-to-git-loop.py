@@ -26,6 +26,8 @@
 # Configuration
 # ==============================================
 
+# Debugging
+debug = "true"
 
 # ==============================================
 # Binaries
@@ -36,12 +38,35 @@
 # Functions
 # ==============================================
 
+#
+# debug()
+# Output debugging text.
+# INPUT: $1 - Text to output if DEBUG="
+#
+def debug (str):
+
+    if debug == "true":
+        print ("debug()", str);
+    else:
+        print "foo"
+
+    return;
+
+
+# Get command line arguments
+def get_cli_arguments():
+    "Get command line arguments."
+    return
+
 
 # ==============================================
 # Main
 # ==============================================
 
+debug("main")
 
 print "svn-to-git-loop.py - convert hierarchical svn repo to git"
 
 
+# Get command line arguments
+#get_cli_arguments()
