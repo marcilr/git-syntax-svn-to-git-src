@@ -43,27 +43,36 @@ debug = "true"
 # Output debugging text.
 # INPUT: $1 - Text to output if DEBUG="
 #
-def debug (str):
+#def debug (str):
 
-    if debug == "true":
-        print ("debug()", str);
-    else:
-        print "foo"
+#    print "debug()"
 
-    return;
+#    if debug == "true":
+#        print ("debug()", str);
+#    else:
+#        print "foo"
+
+#    return;
+
+
+# Function definition is here
+def printme( str ):
+   "This prints a passed string into this function"
+   print str
+   return;
 
 
 # Get command line arguments
-def get_cli_arguments():
-    "Get command line arguments."
-    return
+#def get_cli_arguments():
+#    "Get command line arguments."
+#    return
 
 
 # ==============================================
 # Main
 # ==============================================
 
-debug("main")
+printme("main")
 
 print "svn-to-git-loop.py - convert hierarchical svn repo to git"
 
