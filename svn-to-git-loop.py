@@ -15,7 +15,12 @@
 # Ported from bash to python since the bash while loop would
 # not continue with external svn-to-git was called.
 #
-
+#
+# Links
+# =====
+# Python Functions
+# http://www.tutorialspoint.com/python/python_functions.htm
+#
 
 # ==============================================
 # Configuration
