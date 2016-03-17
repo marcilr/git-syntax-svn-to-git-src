@@ -16,26 +16,10 @@
 DEBUG=true
 
 AUTHORS=authors.txt
+
+
 #SVNPATH=svn+ssh://home/data/svnroot/gci/gci
 #GITPATH=ssh://marcilr@home/data/git/gci
-
-#SVNPATH=svn+ssh://home/data/svnroot/gci/benefits/401k/401k
-#GITPATH=ssh://htpc/data/git/gci/benefits/401k
-
-#SVNPATH=svn+ssh://home/data/svnroot/gci/vmware/vmware
-#GITPATH=ssh://htpc/data/git/gci/vmware
-
-#SVNPATH=svn+ssh://home/data/svnroot/gci/relevance/relevance
-#GITPATH=ssh://htpc/data/git/gci/relevance
-
-#SVNPATH=svn+ssh://home/data/svnroot/gci/relevance/applications/applications
-#GITPATH=ssh://htpc/data/git/gci/relevance/apps
-
-#SVNPATH=svn+ssh://home/data/svnroot/gci/relevance/applications/filexfer/filexfer
-#GITPATH=ssh://htpc/data/git/gci/relevance/applications/filexfer
-
-SVNPATH=svn+ssh://home/data/svnroot/ideas/ideas
-GITPATH=ssh://htpc/data/git/ideas
 
 
 # ==============================================
