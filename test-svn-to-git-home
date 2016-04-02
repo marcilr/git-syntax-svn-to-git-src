@@ -17,9 +17,8 @@ DEBUG=true
 
 AUTHORS=authors.txt
 
-
-#SVNPATH=svn+ssh://home/data/svnroot/gci/gci
-#GITPATH=ssh://marcilr@home/data/git/gci
+SVNPATH=svn+ssh://home/data/svnroot/debt/utilities/utilities
+GITPATH=ssh://marcilr@home/data/git/debt/utilities
 
 
 # ==============================================
