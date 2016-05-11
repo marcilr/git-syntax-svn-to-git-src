@@ -8,6 +8,9 @@ Source related links
 
 Links
 =====
+A Gaggle Of Git Tips  <=== Awesome
+https://www.viget.com/articles/a-gaggle-of-git-tips
+
 cannot push into git repository
 http://stackoverflow.com/questions/3221859/cannot-push-into-git-repository
 
