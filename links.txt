@@ -11,6 +11,9 @@ Links
 cannot push into git repository
 http://stackoverflow.com/questions/3221859/cannot-push-into-git-repository
 
+Effectively Using Git With Subversion
+https://www.viget.com/articles/effectively-using-git-with-subversion
+
 How to convert a normal Git repository to a bare one?
 git clone --bare /path/to/repo
 http://stackoverflow.com/questions/2199897/how-to-convert-a-normal-git-repository-to-a-bare-one/2199939#2199939
